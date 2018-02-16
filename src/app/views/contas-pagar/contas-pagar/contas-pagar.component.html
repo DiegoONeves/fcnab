@@ -1,0 +1,83 @@
+<div class="row">
+  {{contasAPagarParaGerarRemessa|json}}
+  <h3>
+    Listagem de Contas a Pagar</h3>
+</div>
+<div class="row">
+  <div class="form-inline">
+    <div class="form-group">
+      <label for="idBeginDate">Data Inicial de Lançamento
+      </label>
+      <input class="form-control" id="idBeginDate" type="date" name="beginDate" [(ngModel)]="contasPagarSearch.beginDate" />
+      <!-- <ng-datepicker [options]="options" name="beginDate" [(ngModel)]="contasPagarSearch.beginDate"></ng-datepicker> -->
+    </div>
+    <div class="form-group">
+      <label for="idEndDate">Data Final de Lançamento
+      </label>
+      <input class="form-control" id="idEndDate" class="form-control" type="date" name="endDate" [(ngModel)]="contasPagarSearch.endDate"
+      />
+      <!-- <ng-datepicker [options]="options" name="endDate" [(ngModel)]="contasPagarSearch.endDate"></ng-datepicker> -->
+    </div>
+  </div>
+  <br>
+  <button type="button" class="btn btn-info" aria-label="Left Align" (click)="searchContasAPagar(1)">
+    <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Pesquisar
+  </button>
+  <button type="button" class="btn btn-success" aria-label="Left Align" (click)="generateRemessa()">
+    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Gerar Remessa
+  </button>
+</div>
+<br>
+<div class="row">
+  <table class="table table-hover table-bordered table-striped">
+    <tr>
+      <td>
+        <input type="checkbox">
+      </td>
+      <td>Documento</td>
+      <td>Fornecedor</td>
+      <td>CPF/CNPJ</td>
+      <td>Banco</td>
+      <td>Agência</td>
+      <td>Conta</td>
+      <td>Data de Vencimento</td>
+      <td>Status Título</td>
+      <td>Valor Documento</td>
+      <td>Código de Barras</td>
+    </tr>
+    <tr *ngFor="let conta of contasAPagar">
+      <td>
+        <input type="checkbox" (change)="addContaToRemessa(conta, $event)">
+      </td>
+      <td>{{conta.tipoDocumento.descricao}}</td>
+      <td>
+        {{conta.nome_fornecedor }}
+      </td>
+      <td>
+        {{conta.cpfCnpj }}
+      </td>
+      <td>
+        {{conta.data_vencimento}}
+      </td>
+      <td>
+        {{conta.data_vencimento}}
+      </td>
+      <td>
+        {{conta.data_vencimento}}
+      </td>
+      <td>
+        {{conta.data_vencimento}}
+      </td>
+      <td>
+        {{conta.status_titulo}}
+      </td>
+      <td>
+        {{conta.valor_documento | currency:'BRL':true:'1.2-2'}}
+      </td>
+      <td>
+        <input type="text" [(ngModel)]="conta.codigo_de_barras" />
+      </td>
+    </tr>
+  </table>
+
+</div>
