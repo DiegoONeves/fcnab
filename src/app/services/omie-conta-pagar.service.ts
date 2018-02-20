@@ -18,7 +18,7 @@ export class OmieContaPagarService {
     private omieDocumentoService: OmieDocumentoService) { }
 
   async search(contasPagarSearch: ContasPagarSearch) {
-
+    console.log('pesquisa', contasPagarSearch);
     let resultModels = new Array<ContaPagar>();
     let body = {
       call: "ListarContasPagar",
@@ -42,8 +42,12 @@ export class OmieContaPagarService {
       let model = new ContaPagar();
       model.codigo_lancamento_omie = r.codigo_lancamento_omie;
       model.data_vencimento = r.data_vencimento;
+      model.data_emissao = r.data_emissao;
       model.status_titulo = r.status_titulo;
       model.valor_documento = r.valor_documento;
+      model.data_previsao = r.data_previsao;
+      model.numero_documento_fiscal = r.numero_documento_fiscal;
+      model.valorAPagar = r.valor_documento;
       model.tipoDocumento = await this.omieDocumentoService.getByCodigoTipoDocumento(r.codigo_tipo_documento);
       model.codigo_tipo_documento = r.codigo_tipo_documento;
       let fornecedor = await this.omieClienteService.findCliente(parseInt(r.codigo_cliente_fornecedor));

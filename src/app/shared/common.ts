@@ -1,6 +1,9 @@
 export class Common {
 
     public static padLeft(value: string, item: string, size: number): string {
+
+        if (value === undefined) value = "";
+
         while (value.length < size)
             value = item + value;
 
@@ -8,6 +11,7 @@ export class Common {
     }
 
     public static padRight(value: string, item: string, size: number): string {
+        if (value === undefined) value = "";
         while (value.length < size)
             value = value + item;
 
@@ -21,6 +25,14 @@ export class Common {
             returnValue += char;
 
         return returnValue;
+    }
+
+    getConfigurationMaskMoney() {
+        return { prefix: 'R$ ', thousands: '.', decimal: ',' };
+    }
+
+    public static verifyInscricao(value: string) {
+        return value.length > 11 ? "2" : "1";
     }
 
 }

@@ -1,6 +1,9 @@
+import { Fornecedor } from "./fornecedor.model";
+
 export class ContaPagar {
 
     data_vencimento: string;
+    data_emissao: string;
     status_titulo: string;
     valor_documento: number = 0;
     nome_fornecedor: string;
@@ -9,4 +12,12 @@ export class ContaPagar {
     codigo_tipo_documento: string;
     tipoDocumento: any;
     codigo_de_barras: string;
+    fornecedor: Fornecedor = new Fornecedor();
+    valorAPagar: number = 0;
+    desconto: number = 0;
+    juros: number = 0;
+    multa: number = 0;
+    numero_documento_fiscal: string;
+    data_previsao: string;
+
 }

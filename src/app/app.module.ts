@@ -20,6 +20,8 @@ import { environment } from '../environments/environment';
 import { NavbarComponent } from './views/navbar/navbar.component';
 import { FornecedoresComponent } from './views/fornecedores/fornecedores.component';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { FornecedorService } from './services/fornecedor.service';
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 
 
@@ -36,11 +38,13 @@ import { AngularFireDatabase } from 'angularfire2/database';
     RouterModule.forRoot(AppRoutes),
     NgDatepickerModule,
     BrowserAnimationsModule,
+    CurrencyMaskModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [
     OmieContaPagarService,
     OmieClienteService,
+    FornecedorService,
     HttpClient,
     RemessaPagamentoCnabService,
     OmieDocumentoService,

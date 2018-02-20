@@ -23,7 +23,8 @@
   <button type="button" class="btn btn-info" aria-label="Left Align" (click)="searchContasAPagar(1)">
     <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Pesquisar
   </button>
-  <button type="button" class="btn btn-success" aria-label="Left Align" (click)="generateRemessa()">
+  <button [disabled]="contasAPagarParaGerarRemessa.length === 0" type="button" class="btn btn-success" aria-label="Left Align"
+    (click)="generateRemessa()">
     <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Gerar Remessa
   </button>
 </div>
@@ -40,10 +41,15 @@
       <td>Banco</td>
       <td>Agência</td>
       <td>Conta</td>
+      <td>Data de Emissão</td>
       <td>Data de Vencimento</td>
       <td>Status Título</td>
-      <td>Valor Documento</td>
       <td>Código de Barras</td>
+      <td>Valor Documento</td>
+      <td>Valor a Pagar</td>
+      <td>Desconto</td>
+      <td>Multa</td>
+      <td>Juros</td>
     </tr>
     <tr *ngFor="let conta of contasAPagar">
       <td>
@@ -54,16 +60,21 @@
         {{conta.nome_fornecedor }}
       </td>
       <td>
-        {{conta.cpfCnpj }}
+        {{conta.cpfCnpj}}
       </td>
       <td>
-        {{conta.data_vencimento}}
+        {{conta.fornecedor.banco}}
       </td>
       <td>
-        {{conta.data_vencimento}}
+        {{conta.fornecedor.agencia}}
       </td>
       <td>
-        {{conta.data_vencimento}}
+        <div *ngIf="conta.fornecedor.conta && conta.fornecedor.digitoConta > 0">
+          {{conta.fornecedor.conta}}-{{conta.fornecedor.digitoConta}}
+        </div>
+      </td>
+      <td>
+        {{conta.data_emissao}}
       </td>
       <td>
         {{conta.data_vencimento}}
@@ -72,10 +83,24 @@
         {{conta.status_titulo}}
       </td>
       <td>
+        <input type="text" style="width:150px;" [(ngModel)]="conta.codigo_de_barras" />
+      </td>
+      <td>
         {{conta.valor_documento | currency:'BRL':true:'1.2-2'}}
       </td>
       <td>
-        <input type="text" [(ngModel)]="conta.codigo_de_barras" />
+        <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.valorAPagar"
+        />
+      </td>
+      <td>
+        <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.desconto"
+        />
+      </td>
+      <td>
+        <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.multa" />
+      </td>
+      <td>
+        <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.juros" />
       </td>
     </tr>
   </table>

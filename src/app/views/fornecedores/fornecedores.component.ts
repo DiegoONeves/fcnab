@@ -41,6 +41,7 @@ export class FornecedoresComponent implements OnInit {
     this.fornecedor.cpfCnpj = fornecedor.cpfCnpj;
     this.fornecedor.agencia = fornecedor.agencia;
     this.fornecedor.conta = fornecedor.conta;
+    this.fornecedor.banco = fornecedor.banco;
     this.fornecedor.digitoConta = fornecedor.digitoConta;
   }
 

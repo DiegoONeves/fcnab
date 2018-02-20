@@ -5,6 +5,6 @@ export class Fornecedor {
     banco: string = "";
     agencia: string = "";
     conta: string = "";
-    digitoConta: number = 1;
+    digitoConta: number = 0;
 
 }
