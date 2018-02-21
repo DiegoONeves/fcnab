@@ -46,8 +46,6 @@ export class RemessaPagamentoCnabService {
       codigoLote++;
     }
 
-
-
     console.log('file concluído', fileCNAB);
     return fileCNAB;
 
@@ -105,8 +103,21 @@ export class RemessaPagamentoCnabService {
       numeroRegistro++;
     }
 
+    segmentoA.trailer.CODIGO_DO_BANCO = this.remessa.header.CODIGO_DO_BANCO;
+    segmentoA.trailer.CODIGO_DO_LOTE = codigoLote.toString();
+    segmentoA.trailer.TIPO_REGISTRO = "5";
+    segmentoA.trailer.TOTAL_QTDE_REGISTROS = numeroRegistro;
+
+    let sumValues = 0;
+    segmentoA.detalhes.forEach(x => {
+      sumValues += parseFloat(x.VALOR_DO_PAGTO);
+    });
+
+    segmentoA.trailer.TOTAL_VALOR_PAGTOS = sumValues.toString();
+
     //generate trailer
     //this.remessa.lotes.push(segmentoA);
+    linesSegmentoA += segmentoA.trailer.generateTrailerSegmentoA();
 
     return linesSegmentoA;
   }

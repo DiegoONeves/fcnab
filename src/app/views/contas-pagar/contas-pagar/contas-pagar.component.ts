@@ -75,7 +75,7 @@ export class ContasPagarComponent implements OnInit {
 
   generateRemessa() {
     let file = this.remessaPagamentoCnabService.generateRemessa(this.contasAPagarParaGerarRemessa);
-    this.expFile(file);
+    //this.expFile(file);
   }
 
 
