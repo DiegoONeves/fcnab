@@ -32,12 +32,12 @@ export class Detalhe {
     AVISO: string;
     OCORRENCIAS: string;
 
-    BANCO_FAVORECIDO_COD_DE_BARRAS: string;
-    DV_COD_DE_BARRAS: string;
-    VENCIMENTO_COD_DE_BARRAS: string;
-    MOEDA_COD_DE_BARRAS: string;
-    VALOR_COD_DE_BARRAS: string;
-    CAMPO_LIVRE_COD_DE_BARRAS: string;
+    BANCO_FAVORECIDO_COD_DE_BARRAS: string = "";
+    DV_COD_DE_BARRAS: string = "";
+    VENCIMENTO_COD_DE_BARRAS: string = "";
+    MOEDA_COD_DE_BARRAS: string = "";
+    VALOR_COD_DE_BARRAS: string = "";
+    CAMPO_LIVRE_COD_DE_BARRAS: string = "";
     DATA_VENCTO: string;
     VALOR_DO_TITULO: string;
     DESCONTOS: string;
@@ -85,6 +85,10 @@ export class Detalhe {
     private build_SEU_NUMERO() {
         this.detalheText += Common.padRight(this.SEU_NUMERO, ' ', 20);
     }
+    private build_SEU_NUMERO_SEG_J() {
+        this.detalheText += Common.padRight(this.SEU_NUMERO, ' ', 20);
+        this.detalheText += Common.buildCharacters(13, ' ');
+    }
     private build_DATA_DE_PAGTO() {
         this.detalheText += Common.padRight(this.DATA_DE_PAGTO.replace(/[//"]/g, ''), '0', 8);
     }
@@ -106,6 +110,10 @@ export class Detalhe {
 
         this.detalheText += Common.padRight(this.NOSSO_NUMERO, ' ', 15);
         this.detalheText += Common.buildCharacters(5, ' ');
+    }
+    private build_NOSSO_NUMERO_SEG_J() {
+
+        this.detalheText += Common.padRight(this.NOSSO_NUMERO, ' ', 15);
     }
     private build_DATA_EFETIVA() {
         this.detalheText += Common.padRight(this.DATA_EFETIVA, '0', 8);
@@ -142,7 +150,8 @@ export class Detalhe {
     }
 
     public build_CODIGO_DE_BARRAS(codigo: string) {
-        if (codigo && codigo.length === 44) {
+        console.log('código de barrras', codigo)
+        if (codigo) {
             //34196166700000123451101234567880057123457000
             this.BANCO_FAVORECIDO_COD_DE_BARRAS = codigo.substring(0, 3);
             this.MOEDA_COD_DE_BARRAS = codigo.substring(3, 4);
@@ -172,22 +181,23 @@ export class Detalhe {
         this.detalheText += this.CAMPO_LIVRE_COD_DE_BARRAS;
     }
     private build_DATA_VENCTO() {
-        this.detalheText += this.BANCO_FAVORECIDO_COD_DE_BARRAS;
+        this.detalheText += Common.padRight(this.DATA_VENCTO.replace(/[//"]/g, ''), '0', 8);
     }
     private build_VALOR_DO_TITULO() {
-        this.detalheText += this.BANCO_FAVORECIDO_COD_DE_BARRAS;
+        this.detalheText += Common.padLeft(this.VALOR_DO_TITULO.replace('.', ''), '0', 15);
     }
     private build_DESCONTOS() {
-        this.detalheText += this.DESCONTOS;
+        this.detalheText += Common.padLeft(this.DESCONTOS.replace('.', ''), '0', 15);
     }
     private build_ACRESCIMOS() {
-        this.detalheText += this.ACRESCIMOS;
+        this.detalheText += Common.padLeft(this.ACRESCIMOS.replace('.', ''), '0', 15);
     }
     private build_DATA_PAGAMENTO() {
-
+        this.detalheText += Common.padRight(this.DATA_PAGAMENTO.replace(/[//"]/g, ''), '0', 8);
     }
     private build_VALOR_PAGAMENTO() {
-
+        this.detalheText += Common.padLeft(this.VALOR_PAGAMENTO.replace('.', ''), '0', 15);
+        this.detalheText += Common.buildCharacters(15, '0')
     }
 
     generateDetalheSegmentoA() {
@@ -229,24 +239,21 @@ export class Detalhe {
         this.build_NUMERO_DO_REGISTRO();
         this.build_SEGMENTO();
         this.build_TIPO_DE_MOVIMENTO();
-        this.build_CAMARA();
-        this.build_BANCO_FAVORECIDO();
-        this.build_AGENCIA_CONTA();
+        this.build_BANCO_FAVORECIDO_COD_DE_BARRAS();
+        this.build_MOEDA_COD_DE_BARRAS();
+        this.build_DV_COD_DE_BARRAS();
+        this.build_VENCIMENTO_COD_DE_BARRAS();
+        this.build_VALOR_COD_DE_BARRAS();
+        this.build_CAMPO_LIVRE_COD_DE_BARRAS();
         this.build_NOME_DO_FAVORECIDO();
-        this.build_SEU_NUMERO();
-        this.build_DATA_DE_PAGTO();
-        this.build_MOEDA_TIPO();
-        this.build_CODIGO_ISPB();
-        this.build_VALOR_DO_PAGTO();
-        this.build_NOSSO_NUMERO();
-        this.build_DATA_EFETIVA();
-        this.build_VALOR_EFETIVO();
-        this.build_FINALIDADE_DETALHE();
-        this.build_N_DO_DOCUMENTO();
-        this.build_N_DE_INSCRICAO();
-        this.build_FINALIDADE_DOC_E_STATUS_FUNCIONARIO();
-        this.build_FINALIDADE_TED();
-        this.build_AVISO();
+        this.build_DATA_VENCTO();
+        this.build_VALOR_DO_TITULO();
+        this.build_DESCONTOS();
+        this.build_ACRESCIMOS();
+        this.build_DATA_PAGAMENTO();
+        this.build_VALOR_PAGAMENTO();
+        this.build_SEU_NUMERO_SEG_J();
+        this.build_NOSSO_NUMERO_SEG_J();
         this.build_OCORRENCIAS();
 
         return this.detalheText;

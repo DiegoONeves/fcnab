@@ -3,7 +3,7 @@ import { Common } from "../shared/common";
 export class HeaderLote {
     headerLote: string;
     CODIGO_DO_BANCO: string;
-    CODIGO_DO_LOTE: string;
+    CODIGO_DO_LOTE: number;
     TIPO_DE_REGISTRO: string = "1";
     TIPO_DE_OPERACAO: string = "C";
     TIPO_DE_PAGAMENTO: string;
@@ -31,7 +31,7 @@ export class HeaderLote {
     }
 
     private build_CODIGO_DO_LOTE() {
-        this.headerLote += this.CODIGO_DO_LOTE;
+        this.headerLote += Common.padLeft(this.CODIGO_DO_LOTE.toString(), '0', 4);
     }
 
 
@@ -52,8 +52,8 @@ export class HeaderLote {
         this.headerLote += this.FORMA_DE_PAGAMENTO;
     }
 
-    private build_LAYOUT_DO_LOTE() {
-        this.headerLote += Common.padRight("040", ' ', 1);
+    private build_LAYOUT_DO_LOTE(version:string) {
+        this.headerLote += version;
         this.headerLote += Common.buildCharacters(1, ' ');
     }
 
@@ -139,7 +139,7 @@ export class HeaderLote {
         this.build_TIPO_DE_OPERACAO();
         this.build_TIPO_DE_PAGAMENTO();
         this.build_FORMA_DE_PAGAMENTO();
-        this.build_LAYOUT_DO_LOTE();
+        this.build_LAYOUT_DO_LOTE("040");
         this.build_EMPRESA_INSCRICAO();
         this.build_INSCRICAO_NUMERO();
         this.build_IDENTIFICAÇAO_DO_LANCAMENTO();
@@ -170,10 +170,9 @@ export class HeaderLote {
         this.build_TIPO_DE_OPERACAO();
         this.build_TIPO_DE_PAGAMENTO();
         this.build_FORMA_DE_PAGAMENTO();
-        this.build_LAYOUT_DO_LOTE();
+        this.build_LAYOUT_DO_LOTE("030");
         this.build_EMPRESA_INSCRICAO();
         this.build_INSCRICAO_NUMERO();
-        this.build_IDENTIFICAÇAO_DO_LANCAMENTO();
         this.build_AGENCIA();
         this.build_CONTA();
         this.build_DAC();
@@ -200,7 +199,7 @@ export class HeaderLote {
         this.build_TIPO_DE_OPERACAO();
         this.build_TIPO_DE_PAGAMENTO();
         this.build_FORMA_DE_PAGAMENTO();
-        this.build_LAYOUT_DO_LOTE();
+        this.build_LAYOUT_DO_LOTE("");
         this.build_EMPRESA_INSCRICAO();
         this.build_INSCRICAO_NUMERO();
         this.build_IDENTIFICAÇAO_DO_LANCAMENTO();
@@ -231,7 +230,7 @@ export class HeaderLote {
         this.build_TIPO_DE_OPERACAO();
         this.build_TIPO_DE_PAGAMENTO();
         this.build_FORMA_DE_PAGAMENTO();
-        this.build_LAYOUT_DO_LOTE();
+        this.build_LAYOUT_DO_LOTE("");
         this.build_EMPRESA_INSCRICAO();
         this.build_INSCRICAO_NUMERO();
         this.build_IDENTIFICAÇAO_DO_LANCAMENTO();

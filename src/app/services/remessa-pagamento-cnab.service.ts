@@ -13,6 +13,25 @@ import { ConfigurationHeader } from '../models/configuration-header.model';
 @Injectable()
 export class RemessaPagamentoCnabService {
 
+  dadosFC: any = {
+    Nome: "FCAMARA CONSULTORIA E FORMACAO",
+    CNPJ: "03775758000190",
+    Bancario: {
+      CodigoDoBanco: "341",
+      NomeBanco: "BCO ITAU S/A",
+      Agencia: "454",
+      Conta: "44072",
+      DAC: "8"
+    },
+    Endereco: {
+      Logradouro: "RUA BELA CINTRA",
+      Numero: "986",
+      Cidade: "SAO PAULO",
+      Estado: "SP",
+      CEP: "01415000"
+    }
+  }
+
   constructor() { }
   remessa: Remessa = new Remessa();
 
@@ -24,17 +43,15 @@ export class RemessaPagamentoCnabService {
     for (let c of contas)
       contasList.Add(c);
 
-    this.remessa.header.CODIGO_DO_BANCO = "341";
-    this.remessa.header.INSCRICAO_NUMERO = "03775758000190";
-    this.remessa.header.AGENCIA = "454";
-    this.remessa.header.CONTA = "44072";
-    this.remessa.header.DAC_DA_AGENCIA_CONTA_DEBITADA = "8";
-    this.remessa.header.NOME_DA_EMPRESA = "FCAMARA CONSULTORIA E FORMACAO";
-    this.remessa.header.NOME_DO_BANCO = "BCO ITAU S/A";
+    this.remessa.header.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
+    this.remessa.header.INSCRICAO_NUMERO = this.dadosFC.CNPJ;
+    this.remessa.header.AGENCIA = this.dadosFC.Bancario.Agencia;
+    this.remessa.header.CONTA = this.dadosFC.Bancario.Conta;
+    this.remessa.header.DAC_DA_AGENCIA_CONTA_DEBITADA = this.dadosFC.Bancario.DAC;
+    this.remessa.header.NOME_DA_EMPRESA = this.dadosFC.Nome;
+    this.remessa.header.NOME_DO_BANCO = this.dadosFC.Bancario.NomeBanco;
     fileCNAB = this.remessa.header.generateHeader();
     contasList = contasList.OrderBy(x => x.tipoDocumento);
-
-    // let tiposDocumentos = contasList.Select(x => x.codigo_tipo_documento).Distinct().ToArray();
 
     let codigoLote = 1;
     var pagamentosSegmentoA = contasList.Where(x => x.codigo_tipo_documento === "TRA" || x.codigo_tipo_documento === "NF").ToArray();
@@ -49,19 +66,19 @@ export class RemessaPagamentoCnabService {
       codigoLote++;
     }
 
-    var pagamentosSegmentoN = contasList.Where(x => x.codigo_tipo_documento === "BOL").ToArray();
+    var pagamentosSegmentoN = contasList.Where(x => x.codigo_tipo_documento === "BOL1").ToArray();
     if (pagamentosSegmentoN.length > 0) {
       fileCNAB += this.resolveSegmentoN(pagamentosSegmentoN, codigoLote);
       codigoLote++;
     }
 
-    var pagamentosSegmentoO = contasList.Where(x => x.codigo_tipo_documento === "BOL").ToArray();
+    var pagamentosSegmentoO = contasList.Where(x => x.codigo_tipo_documento === "BOL1").ToArray();
     if (pagamentosSegmentoO.length > 0) {
       fileCNAB += this.resolveSegmentoO(pagamentosSegmentoO, codigoLote);
       codigoLote++;
     }
 
-    this.remessa.trailer.CODIGO_DO_BANCO = this.remessa.header.CODIGO_DO_BANCO;
+    this.remessa.trailer.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
     this.remessa.trailer.CODIGO_DO_LOTE = "9999";
     this.remessa.trailer.TIPO_DE_REGISTRO = "9";
     this.remessa.trailer.TOTAL_QTDE_DE_LOTES = this.remessa.lotes.length;
@@ -80,8 +97,8 @@ export class RemessaPagamentoCnabService {
     let linesSegmentoA = "";
     let segmentoA = new Lote();
     segmentoA.header = new HeaderLote();
-    segmentoA.header.CODIGO_DO_BANCO = this.remessa.header.CODIGO_DO_BANCO;
-    segmentoA.header.CODIGO_DO_LOTE = Common.padLeft(this.remessa.getLengthLote().toString(), '0', 4);
+    segmentoA.header.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
+    segmentoA.header.CODIGO_DO_LOTE = codigoLote;
     segmentoA.header.TIPO_DE_PAGAMENTO = "20"; //nos arquivos sempre usa o 20
     segmentoA.header.FORMA_DE_PAGAMENTO = configurationHeader.formaDePagamentoHeaderSegmentoA;
     segmentoA.header.EMPRESA_INSCRICAO = this.remessa.header.EMPRESA_INSCRICAO;
@@ -90,11 +107,11 @@ export class RemessaPagamentoCnabService {
     segmentoA.header.CONTA = this.remessa.header.CONTA;
     segmentoA.header.DAC = this.remessa.header.DAC_DA_AGENCIA_CONTA_DEBITADA;
     segmentoA.header.NOME_DA_EMPRESA = this.remessa.header.NOME_DA_EMPRESA;
-    segmentoA.header.ENDEREÇO_DA_EMPRESA = "RUA BELA CINTRA";
-    segmentoA.header.NUMERO = "986";
-    segmentoA.header.CIDADE = "SAO PAULO";
-    segmentoA.header.CEP = "01415000";
-    segmentoA.header.ESTADO = "SP";
+    segmentoA.header.ENDEREÇO_DA_EMPRESA = this.dadosFC.Endereco.Logradouro;;
+    segmentoA.header.NUMERO = this.dadosFC.Endereco.Numero;
+    segmentoA.header.CIDADE = this.dadosFC.Endereco.Cidade;
+    segmentoA.header.CEP = this.dadosFC.Endereco.CEP;
+    segmentoA.header.ESTADO = this.dadosFC.Endereco.Estado;
     linesSegmentoA = segmentoA.header.generateHeaderSegmentoA();
 
     let numeroRegistro = 1;
@@ -129,7 +146,7 @@ export class RemessaPagamentoCnabService {
     segmentoA.trailer.CODIGO_DO_BANCO = this.remessa.header.CODIGO_DO_BANCO;
     segmentoA.trailer.CODIGO_DO_LOTE = codigoLote.toString();
     segmentoA.trailer.TIPO_REGISTRO = "5";
-    segmentoA.trailer.TOTAL_QTDE_REGISTROS = numeroRegistro;
+    segmentoA.trailer.TOTAL_QTDE_REGISTROS = segmentoA.detalhes.length;
 
     let sumValues = 0;
     segmentoA.detalhes.forEach(x => {
@@ -149,45 +166,48 @@ export class RemessaPagamentoCnabService {
 
   resolveSegmentoJ(contasSegmentoJ: ContaPagar[], codigoLote: number, configurationHeader: ConfigurationHeader) {
     console.log('resolvendo segmento J');
+
     let linesSegmentoJ = "";
     let segmentoJ = new Lote();
     segmentoJ.header = new HeaderLote();
-    segmentoJ.header.CODIGO_DO_BANCO = this.remessa.header.CODIGO_DO_BANCO;
-    segmentoJ.header.CODIGO_DO_LOTE = Common.padLeft(this.remessa.getLengthLote().toString(), '0', 4);
+    segmentoJ.header.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
+    segmentoJ.header.CODIGO_DO_LOTE = codigoLote;
     segmentoJ.header.TIPO_DE_PAGAMENTO = "20"; //nos arquivos sempre usa o 20
     segmentoJ.header.FORMA_DE_PAGAMENTO = configurationHeader.formaDePagamentoHeaderSegmentoJ;
     segmentoJ.header.EMPRESA_INSCRICAO = this.remessa.header.EMPRESA_INSCRICAO;
     segmentoJ.header.INSCRICAO_NUMERO = this.remessa.header.INSCRICAO_NUMERO;
-    segmentoJ.header.AGENCIA = this.remessa.header.AGENCIA;
-    segmentoJ.header.CONTA = this.remessa.header.CONTA;
-    segmentoJ.header.DAC = this.remessa.header.DAC_DA_AGENCIA_CONTA_DEBITADA;
+    segmentoJ.header.AGENCIA = this.dadosFC.Bancario.Agencia;
+    segmentoJ.header.CONTA = this.dadosFC.Bancario.Conta;
+    segmentoJ.header.DAC = this.dadosFC.Bancario.DAC
     segmentoJ.header.NOME_DA_EMPRESA = this.remessa.header.NOME_DA_EMPRESA;
-    segmentoJ.header.ENDEREÇO_DA_EMPRESA = "RUA BELA CINTRA";
-    segmentoJ.header.NUMERO = "986";
-    segmentoJ.header.CIDADE = "SAO PAULO";
-    segmentoJ.header.CEP = "01415000";
-    segmentoJ.header.ESTADO = "SP";
+    segmentoJ.header.ENDEREÇO_DA_EMPRESA = this.dadosFC.Endereco.Logradouro;
+    segmentoJ.header.NUMERO = this.dadosFC.Endereco.Numero;
+    segmentoJ.header.CIDADE = this.dadosFC.Endereco.Cidade;
+    segmentoJ.header.CEP = this.dadosFC.Endereco.CEP;
+    segmentoJ.header.ESTADO = this.dadosFC.Endereco.Estado;
+
     linesSegmentoJ = segmentoJ.header.generateHeaderSegmentoJ();
 
     let numeroRegistro = 1;
     for (let currentConta of contasSegmentoJ) {
       let detalhe = new Detalhe();
-      detalhe.CODIGO_DO_BANCO = this.remessa.header.CODIGO_DO_BANCO;
+      detalhe.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
       detalhe.CODIGO_DO_LOTE = codigoLote.toString();
       detalhe.TIPO_DE_REGISTRO = "3";
-      detalhe.SEGMENTO = "A";
       detalhe.NUMERO_DO_REGISTRO = numeroRegistro.toString();
-      detalhe.BANCO_FAVORECIDO = currentConta.fornecedor.banco;
-      detalhe.AGENCIA_FAVORECIDO = currentConta.fornecedor.agencia;
-      detalhe.CONTA_FAVORECIDO = currentConta.fornecedor.conta;
-      detalhe.DAC_FAVORECIDO = currentConta.fornecedor.digitoConta.toString();
+      detalhe.SEGMENTO = "J";
+      detalhe.TIPO_DE_MOVIMENTO = "000";
+      detalhe.build_CODIGO_DE_BARRAS(currentConta.codigo_de_barras);
       detalhe.NOME_DO_FAVORECIDO = currentConta.fornecedor.nome;
+      detalhe.DATA_VENCTO = currentConta.data_vencimento;
+      detalhe.VALOR_DO_TITULO = currentConta.valor_documento.toString();
+      detalhe.DESCONTOS = currentConta.desconto.toString();
+      let acrescimos = 0;
+      acrescimos = currentConta.juros + currentConta.multa;
+      detalhe.ACRESCIMOS = acrescimos.toString();
+      detalhe.DATA_PAGAMENTO = moment(new Date()).format('DD/MM/YYYY');
+      detalhe.VALOR_PAGAMENTO = currentConta.valorAPagar.toString();
       detalhe.SEU_NUMERO = currentConta.numero_documento_fiscal;
-      detalhe.N_DE_INSCRICAO = currentConta.cpfCnpj;
-      detalhe.DATA_DE_PAGTO = currentConta.data_previsao;
-      detalhe.MOEDA_TIPO = "009";
-      detalhe.VALOR_DO_PAGTO = currentConta.valorAPagar.toString();
-      detalhe.AVISO = "0";
 
       linesSegmentoJ += detalhe.generateDetalheSegmentoJ();
       segmentoJ.detalhes.push(detalhe);
@@ -195,21 +215,22 @@ export class RemessaPagamentoCnabService {
       numeroRegistro++;
     }
 
-    segmentoJ.trailer.CODIGO_DO_BANCO = this.remessa.header.CODIGO_DO_BANCO;
+    segmentoJ.trailer.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
     segmentoJ.trailer.CODIGO_DO_LOTE = codigoLote.toString();
     segmentoJ.trailer.TIPO_REGISTRO = "5";
-    segmentoJ.trailer.TOTAL_QTDE_REGISTROS = numeroRegistro;
+    segmentoJ.trailer.TOTAL_QTDE_REGISTROS = segmentoJ.detalhes.length;
 
     let sumValues = 0;
     segmentoJ.detalhes.forEach(x => {
-      sumValues += parseFloat(x.VALOR_DO_PAGTO);
+      sumValues += parseFloat(x.VALOR_PAGAMENTO);
     });
 
     segmentoJ.trailer.TOTAL_VALOR_PAGTOS = sumValues.toString();
+    console.log('valor total pagtos', segmentoJ.trailer.TOTAL_VALOR_PAGTOS)
 
     //generate trailer
     //this.remessa.lotes.push(segmentoA);
-    linesSegmentoJ += segmentoJ.trailer.generateTrailerSegmentoA();
+    linesSegmentoJ += segmentoJ.trailer.generateTrailerSegmentoJ();
 
     this.remessa.lotes.push(segmentoJ);
 
