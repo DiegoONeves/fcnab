@@ -50,4 +50,17 @@ export class TrailerLote {
 
         return this.trailerLoteText;
     }
+
+    generateTrailerSegmentoJ() {
+        this.trailerLoteText = "";
+
+        this.build_CODIGO_DO_BANCO();
+        this.build_CODIGO_DO_LOTE();
+        this.build_TIPO_REGISTRO();
+        this.build_TOTAL_QTDE_REGISTROS();
+        this.build_TOTAL_VALOR_PAGTOS();
+        this.build_OCORRENCIAS();
+
+        return this.trailerLoteText;
+    }
 }

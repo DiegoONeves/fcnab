@@ -7,6 +7,7 @@ import { RemessaPagamentoCnabService } from '../../../services/remessa-pagamento
 import { FornecedorService } from '../../../services/fornecedor.service';
 import { Fornecedor } from '../../../models/fornecedor.model';
 import { Common } from '../../../shared/common';
+import { ConfigurationHeader } from '../../../models/configuration-header.model';
 
 @Component({
   selector: 'app-contas-pagar',
@@ -15,6 +16,7 @@ import { Common } from '../../../shared/common';
 })
 export class ContasPagarComponent implements OnInit {
 
+  configurationHeader: ConfigurationHeader = new ConfigurationHeader();
   commonHelper: Common = new Common();
   contasPagarSearch: ContasPagarSearch = new ContasPagarSearch();
   contasAPagar = new Array<ContaPagar>();
@@ -74,8 +76,8 @@ export class ContasPagarComponent implements OnInit {
   }
 
   generateRemessa() {
-    let file = this.remessaPagamentoCnabService.generateRemessa(this.contasAPagarParaGerarRemessa);
-    //this.expFile(file);
+    let file = this.remessaPagamentoCnabService.generateRemessa(this.contasAPagarParaGerarRemessa, this.configurationHeader);
+    this.expFile(file);
   }
 
 

@@ -8,6 +8,20 @@ export class Remessa {
     lotes: Lote[] = new Array<Lote>();
     trailer: TrailerRemessa = new TrailerRemessa();
 
+    getLengthLote() {
+        return this.lotes.length + 1;
+    }
+
+    getQtdRegisters() {
+
+        let qtdLinesLote = 2; // contabiliza header e trailer
+        this.lotes.forEach(x => {
+            qtdLinesLote += x.detalhes.length + 2; //soma com header e trailer de cada lote.
+        });
+
+        return qtdLinesLote;
+    }
+
 }
 
 

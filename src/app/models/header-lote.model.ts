@@ -57,7 +57,6 @@ export class HeaderLote {
         this.headerLote += Common.buildCharacters(1, ' ');
     }
 
-
     private build_EMPRESA_INSCRICAO() {
         this.headerLote += Common.verifyInscricao(this.INSCRICAO_NUMERO);
     }
@@ -67,11 +66,9 @@ export class HeaderLote {
         this.headerLote += Common.buildCharacters(20, ' ');
     }
 
-
     private build_IDENTIFICAÇAO_DO_LANCAMENTO() {
 
     }
-
 
     private build_AGENCIA() {
         this.headerLote += Common.padLeft(this.AGENCIA, '0', 5);
@@ -165,16 +162,93 @@ export class HeaderLote {
 
     //Liquidação de títulos (bloquetos) em cobrança no Itaú e em outros bancos
     generateHeaderSegmentoJ() {
-
+        
+        this.headerLote = "";
+        this.build_CODIGO_DO_BANCO();
+        this.build_CODIGO_DO_LOTE();
+        this.build_TIPO_DE_REGISTRO();
+        this.build_TIPO_DE_OPERACAO();
+        this.build_TIPO_DE_PAGAMENTO();
+        this.build_FORMA_DE_PAGAMENTO();
+        this.build_LAYOUT_DO_LOTE();
+        this.build_EMPRESA_INSCRICAO();
+        this.build_INSCRICAO_NUMERO();
+        this.build_IDENTIFICAÇAO_DO_LANCAMENTO();
+        this.build_AGENCIA();
+        this.build_CONTA();
+        this.build_DAC();
+        this.build_NOME_DA_EMPRESA();
+        this.build_FINALIDADE_DO_LOTE();
+        this.build_HISTORICO_DE_CC();
+        this.build_ENDERECO_EMPRESA();
+        this.build_NUMERO();
+        this.build_COMPLEMENTO();
+        this.build_CIDADE();
+        this.build_CEP();
+        this.build_ESTADO();
+        this.build_OCORRENCIAS();
+        
+        return this.headerLote;
     }
 
     //Pagamento de Concessionárias e Tributos com código de barras
     generateHeaderSegmentoO() {
-
+        this.headerLote = "";
+        this.build_CODIGO_DO_BANCO();
+        this.build_CODIGO_DO_LOTE();
+        this.build_TIPO_DE_REGISTRO();
+        this.build_TIPO_DE_OPERACAO();
+        this.build_TIPO_DE_PAGAMENTO();
+        this.build_FORMA_DE_PAGAMENTO();
+        this.build_LAYOUT_DO_LOTE();
+        this.build_EMPRESA_INSCRICAO();
+        this.build_INSCRICAO_NUMERO();
+        this.build_IDENTIFICAÇAO_DO_LANCAMENTO();
+        this.build_AGENCIA();
+        this.build_CONTA();
+        this.build_DAC();
+        this.build_NOME_DA_EMPRESA();
+        this.build_FINALIDADE_DO_LOTE();
+        this.build_HISTORICO_DE_CC();
+        this.build_ENDERECO_EMPRESA();
+        this.build_NUMERO();
+        this.build_COMPLEMENTO();
+        this.build_CIDADE();
+        this.build_CEP();
+        this.build_ESTADO();
+        this.build_OCORRENCIAS();
+        
+        return this.headerLote;
     }
 
     //Pagamento de Tributos sem código de barras e FGTS
     generateHeaderSegmentoN() {
 
+        this.headerLote = "";
+        this.build_CODIGO_DO_BANCO();
+        this.build_CODIGO_DO_LOTE();
+        this.build_TIPO_DE_REGISTRO();
+        this.build_TIPO_DE_OPERACAO();
+        this.build_TIPO_DE_PAGAMENTO();
+        this.build_FORMA_DE_PAGAMENTO();
+        this.build_LAYOUT_DO_LOTE();
+        this.build_EMPRESA_INSCRICAO();
+        this.build_INSCRICAO_NUMERO();
+        this.build_IDENTIFICAÇAO_DO_LANCAMENTO();
+        this.build_AGENCIA();
+        this.build_CONTA();
+        this.build_DAC();
+        this.build_NOME_DA_EMPRESA();
+        this.build_FINALIDADE_DO_LOTE();
+        this.build_HISTORICO_DE_CC();
+        this.build_ENDERECO_EMPRESA();
+        this.build_NUMERO();
+        this.build_COMPLEMENTO();
+        this.build_CIDADE();
+        this.build_CEP();
+        this.build_ESTADO();
+        this.build_OCORRENCIAS();
+        
+        return this.headerLote;
     }
 }

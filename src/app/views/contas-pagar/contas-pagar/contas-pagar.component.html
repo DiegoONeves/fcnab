@@ -1,5 +1,5 @@
 <div class="row">
-  {{contasAPagarParaGerarRemessa|json}}
+  {{contasAPagarParaGerarRemessa|json}} {{configurationHeader|json}}
   <h3>
     Listagem de Contas a Pagar</h3>
 </div>
@@ -30,79 +30,99 @@
 </div>
 <br>
 <div class="row">
-  <table class="table table-hover table-bordered table-striped">
-    <tr>
-      <td>
-        <input type="checkbox">
-      </td>
-      <td>Documento</td>
-      <td>Fornecedor</td>
-      <td>CPF/CNPJ</td>
-      <td>Banco</td>
-      <td>Agência</td>
-      <td>Conta</td>
-      <td>Data de Emissão</td>
-      <td>Data de Vencimento</td>
-      <td>Status Título</td>
-      <td>Código de Barras</td>
-      <td>Valor Documento</td>
-      <td>Valor a Pagar</td>
-      <td>Desconto</td>
-      <td>Multa</td>
-      <td>Juros</td>
-    </tr>
-    <tr *ngFor="let conta of contasAPagar">
-      <td>
-        <input type="checkbox" (change)="addContaToRemessa(conta, $event)">
-      </td>
-      <td>{{conta.tipoDocumento.descricao}}</td>
-      <td>
-        {{conta.nome_fornecedor }}
-      </td>
-      <td>
-        {{conta.cpfCnpj}}
-      </td>
-      <td>
-        {{conta.fornecedor.banco}}
-      </td>
-      <td>
-        {{conta.fornecedor.agencia}}
-      </td>
-      <td>
-        <div *ngIf="conta.fornecedor.conta && conta.fornecedor.digitoConta > 0">
-          {{conta.fornecedor.conta}}-{{conta.fornecedor.digitoConta}}
-        </div>
-      </td>
-      <td>
-        {{conta.data_emissao}}
-      </td>
-      <td>
-        {{conta.data_vencimento}}
-      </td>
-      <td>
-        {{conta.status_titulo}}
-      </td>
-      <td>
-        <input type="text" style="width:150px;" [(ngModel)]="conta.codigo_de_barras" />
-      </td>
-      <td>
-        {{conta.valor_documento | currency:'BRL':true:'1.2-2'}}
-      </td>
-      <td>
-        <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.valorAPagar"
-        />
-      </td>
-      <td>
-        <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.desconto"
-        />
-      </td>
-      <td>
-        <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.multa" />
-      </td>
-      <td>
-        <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.juros" />
-      </td>
-    </tr>
-  </table>
+  <h3>Configurações Segmento A</h3>
+  <div class="form-group">
+    <label>Forma de Pagamento</label>
+    <select name="formaDePagamentoHeaderSegmentoA" [(ngModel)]="configurationHeader.formaDePagamentoHeaderSegmentoA" class="form-control">
+      <option value="{{formA.id}}" *ngFor="let formA of commonHelper.getFormasDePagamento()">{{formA.value}}</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <h3>Configurações Segmento J</h3>
+  <div class="form-group">
+    <label>Forma de Pagamento</label>
+    <select class="form-control" name="formaDePagamentoHeaderSegmentoJ" [(ngModel)]="configurationHeader.formaDePagamentoHeaderSegmentoJ">
+      <option value="{{formJ.id}}" *ngFor="let formJ of commonHelper.getFormasDePagamento()">{{formJ.value}}</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="scrollmenu">
+    <table class="table table-hover table-bordered table-striped">
+      <tr>
+        <td>
+          <input type="checkbox">
+        </td>
+        <td>Documento</td>
+        <td>Fornecedor</td>
+        <td>CPF/CNPJ</td>
+        <td>Banco</td>
+        <td>Agência</td>
+        <td>Conta</td>
+        <td>Data de Emissão</td>
+        <td>Data de Vencimento</td>
+        <td>Status Título</td>
+        <td>Código de Barras</td>
+        <td>Valor Documento</td>
+        <td>Valor a Pagar</td>
+        <td>Desconto</td>
+        <td>Multa</td>
+        <td>Juros</td>
+      </tr>
+      <tr *ngFor="let conta of contasAPagar">
+        <td>
+          <input type="checkbox" (change)="addContaToRemessa(conta, $event)">
+        </td>
+        <td>{{conta.tipoDocumento.descricao}}</td>
+        <td>
+          {{conta.nome_fornecedor }}
+        </td>
+        <td>
+          {{conta.cpfCnpj}}
+        </td>
+        <td>
+          {{conta.fornecedor.banco}}
+        </td>
+        <td>
+          {{conta.fornecedor.agencia}}
+        </td>
+        <td>
+          <div *ngIf="conta.fornecedor.conta && conta.fornecedor.digitoConta > 0">
+            {{conta.fornecedor.conta}}-{{conta.fornecedor.digitoConta}}
+          </div>
+        </td>
+        <td>
+          {{conta.data_emissao}}
+        </td>
+        <td>
+          {{conta.data_vencimento}}
+        </td>
+        <td>
+          {{conta.status_titulo}}
+        </td>
+        <td>
+          <input type="text" style="width:350px;" [(ngModel)]="conta.codigo_de_barras" />
+        </td>
+        <td>
+          {{conta.valor_documento | currency:'BRL':true:'1.2-2'}}
+        </td>
+        <td>
+          <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.valorAPagar"
+          />
+        </td>
+        <td>
+          <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.desconto"
+          />
+        </td>
+        <td>
+          <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.multa" />
+        </td>
+        <td>
+          <input currencyMask style="width:80px;" [options]="commonHelper.getConfigurationMaskMoney()" [(ngModel)]="conta.juros" />
+        </td>
+      </tr>
+    </table>
+  </div>
 
 </div>
