@@ -52,7 +52,7 @@ export class HeaderLote {
         this.headerLote += this.FORMA_DE_PAGAMENTO;
     }
 
-    private build_LAYOUT_DO_LOTE(version:string) {
+    private build_LAYOUT_DO_LOTE(version: string) {
         this.headerLote += version;
         this.headerLote += Common.buildCharacters(1, ' ');
     }
@@ -156,13 +156,13 @@ export class HeaderLote {
         this.build_CEP();
         this.build_ESTADO();
         this.build_OCORRENCIAS();
-        
+
         return this.headerLote;
     }
 
     //Liquidação de títulos (bloquetos) em cobrança no Itaú e em outros bancos
     generateHeaderSegmentoJ() {
-        
+
         this.headerLote = "";
         this.build_CODIGO_DO_BANCO();
         this.build_CODIGO_DO_LOTE();
@@ -186,7 +186,7 @@ export class HeaderLote {
         this.build_CEP();
         this.build_ESTADO();
         this.build_OCORRENCIAS();
-        
+
         return this.headerLote;
     }
 
@@ -199,7 +199,7 @@ export class HeaderLote {
         this.build_TIPO_DE_OPERACAO();
         this.build_TIPO_DE_PAGAMENTO();
         this.build_FORMA_DE_PAGAMENTO();
-        this.build_LAYOUT_DO_LOTE("");
+        this.build_LAYOUT_DO_LOTE("030");
         this.build_EMPRESA_INSCRICAO();
         this.build_INSCRICAO_NUMERO();
         this.build_IDENTIFICAÇAO_DO_LANCAMENTO();
@@ -216,7 +216,7 @@ export class HeaderLote {
         this.build_CEP();
         this.build_ESTADO();
         this.build_OCORRENCIAS();
-        
+
         return this.headerLote;
     }
 
@@ -230,7 +230,7 @@ export class HeaderLote {
         this.build_TIPO_DE_OPERACAO();
         this.build_TIPO_DE_PAGAMENTO();
         this.build_FORMA_DE_PAGAMENTO();
-        this.build_LAYOUT_DO_LOTE("");
+        this.build_LAYOUT_DO_LOTE("030");
         this.build_EMPRESA_INSCRICAO();
         this.build_INSCRICAO_NUMERO();
         this.build_IDENTIFICAÇAO_DO_LANCAMENTO();
@@ -247,7 +247,7 @@ export class HeaderLote {
         this.build_CEP();
         this.build_ESTADO();
         this.build_OCORRENCIAS();
-        
+
         return this.headerLote;
     }
 }

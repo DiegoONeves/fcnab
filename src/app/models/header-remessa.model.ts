@@ -133,6 +133,7 @@ export class HeaderRemessa {
         this.build_ZEROS();
         this.build_UNIDADE_DE_DENSIDADE();
         this.build_BRANCOS();
+        console.log('header arquivo', this.headerRemessa.length);
         this.headerRemessa += '\r\n';
         return this.headerRemessa;
     }

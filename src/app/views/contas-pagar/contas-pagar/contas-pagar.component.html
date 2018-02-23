@@ -1,18 +1,17 @@
 <div class="row">
-  {{contasAPagarParaGerarRemessa|json}} {{configurationHeader|json}}
   <h3>
     Listagem de Contas a Pagar</h3>
 </div>
 <div class="row">
   <div class="form-inline">
     <div class="form-group">
-      <label for="idBeginDate">Data Inicial de Lançamento
+      <label for="idBeginDate">Data Inicial de Vencimento
       </label>
       <input class="form-control" id="idBeginDate" type="date" name="beginDate" [(ngModel)]="contasPagarSearch.beginDate" />
       <!-- <ng-datepicker [options]="options" name="beginDate" [(ngModel)]="contasPagarSearch.beginDate"></ng-datepicker> -->
     </div>
     <div class="form-group">
-      <label for="idEndDate">Data Final de Lançamento
+      <label for="idEndDate">Data Final de Vencimento
       </label>
       <input class="form-control" id="idEndDate" class="form-control" type="date" name="endDate" [(ngModel)]="contasPagarSearch.endDate"
       />
@@ -23,14 +22,19 @@
   <button type="button" class="btn btn-info" aria-label="Left Align" (click)="searchContasAPagar(1)">
     <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Pesquisar
   </button>
-  <button [disabled]="contasAPagarParaGerarRemessa.length === 0" type="button" class="btn btn-success" aria-label="Left Align"
-    (click)="generateRemessa()">
+  <button [disabled]="isCanGenerateRemessa()" type="button" class="btn btn-success" aria-label="Left Align" (click)="generateRemessa()">
     <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Gerar Remessa
   </button>
 </div>
 <br>
 <div class="row">
-  <h3>Configurações Segmento A</h3>
+  <h3>Configurações de Header (Segmento A)</h3>
+  <div class="form-group">
+    <label>Tipo de Pagamento</label>
+    <select name="tipoDePagamentoHeaderSegmentoA" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoA" class="form-control">
+      <option value="{{formTipoA.id}}" *ngFor="let formTipoA of commonHelper.getTiposDePagamento()">{{formTipoA.value}}</option>
+    </select>
+  </div>
   <div class="form-group">
     <label>Forma de Pagamento</label>
     <select name="formaDePagamentoHeaderSegmentoA" [(ngModel)]="configurationHeader.formaDePagamentoHeaderSegmentoA" class="form-control">
@@ -39,7 +43,43 @@
   </div>
 </div>
 <div class="row">
-  <h3>Configurações Segmento J</h3>
+  <h3>Configurações de Header (Segmento O)</h3>
+  <div class="form-group">
+    <label>Tipo de Pagamento</label>
+    <select name="tipoDePagamentoHeaderSegmentoO" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoO" class="form-control">
+      <option value="{{formTipoO.id}}" *ngFor="let formTipoO of commonHelper.getTiposDePagamento()">{{formTipoO.value}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Forma de Pagamento</label>
+    <select class="form-control" name="formaDePagamentoHeaderSegmentoO" [(ngModel)]="configurationHeader.formaDePagamentoHeaderSegmentoO">
+      <option value="{{formO.id}}" *ngFor="let formO of commonHelper.getFormasDePagamento()">{{formO.value}}</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <h3>Configurações de Header (Segmento N)</h3>
+  <div class="form-group">
+    <label>Tipo de Pagamento</label>
+    <select name="tipoDePagamentoHeaderSegmentoN" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoN" class="form-control">
+      <option value="{{formN.id}}" *ngFor="let formN of commonHelper.getTiposDePagamento()">{{formN.value}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Forma de Pagamento</label>
+    <select class="form-control" name="formaDePagamentoHeaderSegmentoN" [(ngModel)]="configurationHeader.formaDePagamentoHeaderSegmentoN">
+      <option value="{{formN.id}}" *ngFor="let formN of commonHelper.getFormasDePagamento()">{{formN.value}}</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <h3>Configurações de Header (Segmento J)</h3>
+  <div class="form-group">
+    <label>Tipo de Pagamento</label>
+    <select name="tipoDePagamentoHeaderSegmentoJ" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoJ" class="form-control">
+      <option value="{{formTipoJ.id}}" *ngFor="let formTipoJ of commonHelper.getTiposDePagamento()">{{formTipoJ.value}}</option>
+    </select>
+  </div>
   <div class="form-group">
     <label>Forma de Pagamento</label>
     <select class="form-control" name="formaDePagamentoHeaderSegmentoJ" [(ngModel)]="configurationHeader.formaDePagamentoHeaderSegmentoJ">
@@ -52,9 +92,10 @@
     <table class="table table-hover table-bordered table-striped">
       <tr>
         <td>
-          <input type="checkbox">
+          <input type="checkbox" (change)="selecAll($event)">
         </td>
         <td>Documento</td>
+        <td>Tipo de Movimento</td>
         <td>Fornecedor</td>
         <td>CPF/CNPJ</td>
         <td>Banco</td>
@@ -72,9 +113,14 @@
       </tr>
       <tr *ngFor="let conta of contasAPagar">
         <td>
-          <input type="checkbox" (change)="addContaToRemessa(conta, $event)">
+          <input type="checkbox" [(ngModel)]="conta.selecionado">
         </td>
         <td>{{conta.tipoDocumento.descricao}}</td>
+        <td>
+          <select class="form-control" style="width:400px;" [(ngModel)]="conta.tipo_de_movimento">
+            <option value="{{tm.id}}" *ngFor="let tm of commonHelper.getTiposDeMovimento()">{{tm.value}}</option>
+          </select>
+        </td>
         <td>
           {{conta.nome_fornecedor }}
         </td>

@@ -8,6 +8,7 @@ import { ContaPagar } from '../models/conta-pagar.model';
 import * as moment from 'moment';
 import { OmieClienteService } from './omie-cliente.service';
 import { OmieDocumentoService } from './omie-documento.service';
+import { Common } from '../shared/common';
 
 @Injectable()
 export class OmieContaPagarService {
@@ -18,7 +19,6 @@ export class OmieContaPagarService {
     private omieDocumentoService: OmieDocumentoService) { }
 
   async search(contasPagarSearch: ContasPagarSearch) {
-    console.log('pesquisa', contasPagarSearch);
     let resultModels = new Array<ContaPagar>();
     let body = {
       call: "ListarContasPagar",
@@ -28,9 +28,7 @@ export class OmieContaPagarService {
         {
           pagina: contasPagarSearch.page,
           registros_por_pagina: contasPagarSearch.limit,
-          apenas_importado_api: "N",
-          filtrar_por_data_de: moment(contasPagarSearch.beginDate).format('DD/MM/YYYY'),
-          filtrar_por_data_ate: moment(contasPagarSearch.endDate).format('DD/MM/YYYY')
+          apenas_importado_api: "N"
         }
       ]
     };
@@ -40,6 +38,7 @@ export class OmieContaPagarService {
 
     for (let r of result.conta_pagar_cadastro) {
       let model = new ContaPagar();
+      model.codigo_de_barras = r.codigo_barras_ficha_compensacao;
       model.codigo_lancamento_omie = r.codigo_lancamento_omie;
       model.data_vencimento = r.data_vencimento;
       model.data_emissao = r.data_emissao;
@@ -50,17 +49,12 @@ export class OmieContaPagarService {
       model.valorAPagar = r.valor_documento;
       model.tipoDocumento = await this.omieDocumentoService.getByCodigoTipoDocumento(r.codigo_tipo_documento);
       model.codigo_tipo_documento = r.codigo_tipo_documento;
-      let fornecedor = await this.omieClienteService.findCliente(parseInt(r.codigo_cliente_fornecedor));
-      model.nome_fornecedor = fornecedor.nome_fantasia;
-      model.cpfCnpj = fornecedor.cnpj_cpf;
+      let fornecedorOmie = await this.omieClienteService.findCliente(parseInt(r.codigo_cliente_fornecedor));
+      model.nome_fornecedor = fornecedorOmie.nome_fantasia;
+      model.cpfCnpj = Common.formatCpfCnpj(fornecedorOmie.cnpj_cpf);
       resultModels.push(model);
     }
 
     return resultModels;
   }
-
-  obterConta(codigo_lancamento_omie: string, codigo_lancamento_integracao: string = "") {
-
-  }
-
 }

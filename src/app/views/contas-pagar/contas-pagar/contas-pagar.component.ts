@@ -20,19 +20,6 @@ export class ContasPagarComponent implements OnInit {
   commonHelper: Common = new Common();
   contasPagarSearch: ContasPagarSearch = new ContasPagarSearch();
   contasAPagar = new Array<ContaPagar>();
-  contasAPagarParaGerarRemessa = new Array<ContaPagar>();
-  checkboxValue: boolean = false;
-  options: any = {
-    minYear: 1970,
-    maxYear: 2030,
-    displayFormat: 'DD/MM/YYYY',
-    barTitleFormat: 'MMMM YYYY',
-    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
-    locale: ptLocale,
-    // minDate: new Date(Date.now()), // Minimal selectable date
-    // maxDate: new Date(Date.now()),  // Maximal selectable date
-    barTitleIfEmpty: 'Selecione uma data'
-  };
 
   constructor(private omieContaPagarService: OmieContaPagarService,
     private remessaPagamentoCnabService: RemessaPagamentoCnabService,
@@ -42,15 +29,14 @@ export class ContasPagarComponent implements OnInit {
 
   }
 
-  addContaToRemessa(contaPagar: ContaPagar, value: any) {
+  isCanGenerateRemessa() {
+    return this.contasAPagar.filter(x => x.selecionado).length == 0;
+  }
 
+  selecAll(value: any) {
     let isChecked = value.target.checked;
-    if (isChecked) {
-      this.contasAPagarParaGerarRemessa.push(contaPagar);
-    } else {
-      this.contasAPagarParaGerarRemessa = this.contasAPagarParaGerarRemessa.filter(x => x.codigo_lancamento_omie !== contaPagar.codigo_lancamento_omie);
-    }
-
+    for (let conta of this.contasAPagar)
+      conta.selecionado = isChecked;
   }
 
   async searchContasAPagar(page: number) {
@@ -60,10 +46,10 @@ export class ContasPagarComponent implements OnInit {
     this.contasAPagar = await this.omieContaPagarService.search(this.contasPagarSearch);
 
     for (let c of this.contasAPagar) {
-      this.fornecedorService.getByCpfCnpj(c.cpfCnpj).subscribe(x => {
+      this.fornecedorService.getByCpfCnpj(Common.formatCpfCnpj(c.cpfCnpj)).subscribe(x => {
         if (x.length > 0) {
           c.fornecedor.nome = x[0].nome;
-          c.fornecedor.cpfCnpj = x[0].cpfCnpj;
+          c.fornecedor.cpfCnpj = Common.formatCpfCnpj(x[0].cpfCnpj);
           c.fornecedor.banco = x[0].banco;
           c.fornecedor.agencia = x[0].agencia;
           c.fornecedor.conta = x[0].conta;
@@ -76,14 +62,13 @@ export class ContasPagarComponent implements OnInit {
   }
 
   generateRemessa() {
-    let file = this.remessaPagamentoCnabService.generateRemessa(this.contasAPagarParaGerarRemessa, this.configurationHeader);
+    let file = this.remessaPagamentoCnabService.generateRemessa(this.contasAPagar.filter(x => x.selecionado), this.configurationHeader);
     this.expFile(file);
   }
 
 
 
   saveTextAsFile(data, filename) {
-
     if (!data) {
       console.error('Console.save: No data')
       return;
@@ -113,7 +98,7 @@ export class ContasPagarComponent implements OnInit {
 
 
   expFile(fileText: string) {
-    var fileName = "newfile001.txt"
+    var fileName = "CNAB.txt"
     this.saveTextAsFile(fileText, fileName);
   }
 

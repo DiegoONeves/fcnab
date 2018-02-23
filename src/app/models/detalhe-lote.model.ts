@@ -31,7 +31,6 @@ export class Detalhe {
     FINALIDADE_TED: string;
     AVISO: string;
     OCORRENCIAS: string;
-
     BANCO_FAVORECIDO_COD_DE_BARRAS: string = "";
     DV_COD_DE_BARRAS: string = "";
     VENCIMENTO_COD_DE_BARRAS: string = "";
@@ -44,6 +43,23 @@ export class Detalhe {
     ACRESCIMOS: string;
     DATA_PAGAMENTO: string;
     VALOR_PAGAMENTO: string;
+    VALOR_A_PAGAR: string;
+    CODIGO_DO_REGISTRO: string;
+    TIPO_DE_INSCRICAO_PAGADOR: string;
+    NUMERO_INSCRICAO_PAGADOR: string;
+    NOME_PAGADOR: string;
+    TIPO_DE_INSCRICAO_BENEFICIARIO: string;
+    NUMERO_INSCRICAO_BENEFICIARIO: string;
+    NOME_BENEFICIARIO: string;
+    TIPO_DE_INSCRICAO_SACADOR: string;
+    NUMERO_INSCRICAO_SACADOR: string;
+    NOME_SACADOR: string;
+    NOME_CONCESSIONARIA: string;
+    CODIGO_DE_BARRAS: string;
+    //só usará esse campo se for diferente de real
+    QUANTIDADE_MOEDA: string;
+    NOTA_FISCAL: string;
+    DADOS_DO_TRIBUTO: string;
 
     private build_CODIGO_DO_BANCO() {
         this.detalheText = this.CODIGO_DO_BANCO;
@@ -85,6 +101,10 @@ export class Detalhe {
     private build_SEU_NUMERO() {
         this.detalheText += Common.padRight(this.SEU_NUMERO, ' ', 20);
     }
+    private build_SEU_NUMERO_SEG_O() {
+        this.detalheText += Common.padRight(this.SEU_NUMERO, ' ', 20);
+        this.detalheText += Common.buildCharacters(21, ' ');
+    }
     private build_SEU_NUMERO_SEG_J() {
         this.detalheText += Common.padRight(this.SEU_NUMERO, ' ', 20);
         this.detalheText += Common.buildCharacters(13, ' ');
@@ -107,13 +127,15 @@ export class Detalhe {
         this.detalheText += Common.padLeft(this.VALOR_DO_PAGTO.replace('.', ''), '0', 15);
     }
     private build_NOSSO_NUMERO() {
-
         this.detalheText += Common.padRight(this.NOSSO_NUMERO, ' ', 15);
         this.detalheText += Common.buildCharacters(5, ' ');
     }
     private build_NOSSO_NUMERO_SEG_J() {
-
         this.detalheText += Common.padRight(this.NOSSO_NUMERO, ' ', 15);
+    }
+    private build_NOSSO_NUMERO_SEG_O() {
+        this.detalheText += Common.padRight(this.NOSSO_NUMERO, ' ', 15);
+        this.detalheText += Common.buildCharacters(21, ' ');
     }
     private build_DATA_EFETIVA() {
         this.detalheText += Common.padRight(this.DATA_EFETIVA, '0', 8);
@@ -146,13 +168,12 @@ export class Detalhe {
     }
     private build_OCORRENCIAS() {
         this.detalheText += Common.padRight(this.OCORRENCIAS, ' ', 10);
+        console.log(this.detalheText.length);
         this.detalheText += '\r\n';
     }
 
     public build_CODIGO_DE_BARRAS(codigo: string) {
-        console.log('código de barrras', codigo)
         if (codigo) {
-            //34196166700000123451101234567880057123457000
             this.BANCO_FAVORECIDO_COD_DE_BARRAS = codigo.substring(0, 3);
             this.MOEDA_COD_DE_BARRAS = codigo.substring(3, 4);
             this.DV_COD_DE_BARRAS = codigo.substring(4, 5);
@@ -195,9 +216,76 @@ export class Detalhe {
     private build_DATA_PAGAMENTO() {
         this.detalheText += Common.padRight(this.DATA_PAGAMENTO.replace(/[//"]/g, ''), '0', 8);
     }
+    private build_DATA_PAGAMENTO_SEG_O() {
+        this.detalheText += Common.padRight(this.DATA_PAGAMENTO.replace(/[//"]/g, ''), '0', 8);
+        this.detalheText += Common.buildCharacters(15, '0');
+        this.detalheText += Common.buildCharacters(3, ' ');
+    }
     private build_VALOR_PAGAMENTO() {
         this.detalheText += Common.padLeft(this.VALOR_PAGAMENTO.replace('.', ''), '0', 15);
-        this.detalheText += Common.buildCharacters(15, '0')
+        this.detalheText += Common.buildCharacters(15, '0');
+    }
+
+    private build_CODIGO_DO_REGISTRO() {
+        this.detalheText += Common.padLeft(this.CODIGO_DO_REGISTRO, '0', 2);
+    }
+    private build_TIPO_DE_INSCRICAO_PAGADOR() {
+        this.detalheText += Common.padLeft(this.TIPO_DE_INSCRICAO_PAGADOR, '0', 1);
+    }
+    private build_NUMERO_INSCRICAO_PAGADOR() {
+        this.detalheText += this.TIPO_DE_INSCRICAO_PAGADOR === "1" ?
+            Common.padRight(this.NUMERO_INSCRICAO_PAGADOR, ' ', 15) :
+            Common.padLeft(this.NUMERO_INSCRICAO_PAGADOR, '0', 15);
+    }
+    private build_NOME_PAGADOR() {
+        this.detalheText += Common.padRight(this.NOME_PAGADOR, ' ', 40);
+    }
+    private build_TIPO_DE_INSCRICAO_BENEFICIARIO() {
+        this.detalheText += Common.padLeft(this.TIPO_DE_INSCRICAO_BENEFICIARIO, '0', 1);
+    }
+    private build_NUMERO_INSCRICAO_BENEFICIARIO() {
+        this.detalheText += this.TIPO_DE_INSCRICAO_BENEFICIARIO === "1" ?
+            Common.padRight(this.NUMERO_INSCRICAO_BENEFICIARIO, ' ', 15) :
+            Common.padLeft(this.NUMERO_INSCRICAO_BENEFICIARIO, '0', 15);
+    }
+    private build_NOME_BENEFICIARIO() {
+        this.detalheText += Common.padRight(this.NOME_BENEFICIARIO, ' ', 40);
+    }
+    private build_TIPO_DE_INSCRICAO_SACADOR() {
+        this.detalheText += Common.padLeft(this.TIPO_DE_INSCRICAO_SACADOR, '0', 1);
+    }
+    private build_NUMERO_INSCRICAO_SACADOR() {
+        this.detalheText += this.TIPO_DE_INSCRICAO_SACADOR === "1" ?
+            Common.padRight(this.NUMERO_INSCRICAO_SACADOR, ' ', 15) :
+            Common.padLeft(this.NUMERO_INSCRICAO_SACADOR, '0', 15);
+    }
+    private build_NOME_SACADOR() {
+        this.detalheText += Common.padRight(this.NOME_SACADOR, ' ', 40);
+        this.detalheText += Common.buildCharacters(53, ' ');
+        this.detalheText += '\r\n';
+    }
+
+    private build_NOME_CONCESSIONARIA() {
+        this.detalheText += Common.padRight(this.NOME_CONCESSIONARIA, ' ', 30);
+    }
+    private build_CODIGO_DE_BARRAS_CONCESSIONARIA() {
+        this.detalheText += Common.padRight(this.CODIGO_DE_BARRAS, ' ', 48);
+    }
+    private build_QUANTIDADE_MOEDA() {
+        this.detalheText += Common.normalizeValues(this.QUANTIDADE_MOEDA, 7, 8);
+    }
+
+    private build_NOTA_FISCAL() {
+        this.detalheText += Common.padRight(this.NOTA_FISCAL, ' ', 9);
+        this.detalheText += Common.buildCharacters(3, ' ');//BRANCOS
+    }
+
+    private build_VALOR_A_PAGAR() {
+        this.detalheText += Common.normalizeValues(this.VALOR_A_PAGAR, 13, 2);
+    }
+
+    private build_DADOS_DO_TRIBUTO() {
+
     }
 
     generateDetalheSegmentoA() {
@@ -259,8 +347,46 @@ export class Detalhe {
         return this.detalheText;
     }
 
+    generateDetalheSegmentoJ52() {
+        this.detalheText = "";
+        this.build_CODIGO_DO_BANCO();
+        this.build_CODIGO_DO_LOTE();
+        this.build_TIPO_DE_REGISTRO();
+        this.build_NUMERO_DO_REGISTRO();
+        this.build_SEGMENTO();
+        this.build_TIPO_DE_MOVIMENTO();
+        this.build_CODIGO_DO_REGISTRO();
+        this.build_TIPO_DE_INSCRICAO_PAGADOR();
+        this.build_NUMERO_INSCRICAO_PAGADOR();
+        this.build_NOME_PAGADOR();
+        this.build_TIPO_DE_INSCRICAO_BENEFICIARIO();
+        this.build_NUMERO_INSCRICAO_BENEFICIARIO();
+        this.build_NOME_BENEFICIARIO();
+        this.build_TIPO_DE_INSCRICAO_SACADOR();
+        this.build_NUMERO_INSCRICAO_SACADOR();
+        this.build_NOME_SACADOR();
+        return this.detalheText;
+    }
+
     generateDetalheSegmentoO() {
         this.detalheText = "";
+        this.build_CODIGO_DO_BANCO();
+        this.build_CODIGO_DO_LOTE();
+        this.build_TIPO_DE_REGISTRO();
+        this.build_NUMERO_DO_REGISTRO();
+        this.build_SEGMENTO();
+        this.build_TIPO_DE_MOVIMENTO();
+        this.build_CODIGO_DE_BARRAS_CONCESSIONARIA();
+        this.build_NOME_CONCESSIONARIA();
+        this.build_DATA_VENCTO();
+        this.build_MOEDA_TIPO();
+        this.build_QUANTIDADE_MOEDA();
+        this.build_VALOR_A_PAGAR();
+        this.build_DATA_PAGAMENTO_SEG_O();
+        this.build_NOTA_FISCAL();
+        this.build_SEU_NUMERO();
+        this.build_NOSSO_NUMERO_SEG_O();
+        this.build_OCORRENCIAS();
 
         return this.detalheText;
     }

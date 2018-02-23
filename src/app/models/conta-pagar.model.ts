@@ -2,6 +2,7 @@ import { Fornecedor } from "./fornecedor.model";
 
 export class ContaPagar {
 
+    selecionado: boolean;
     data_vencimento: string;
     data_emissao: string;
     status_titulo: string;
@@ -19,5 +20,6 @@ export class ContaPagar {
     multa: number = 0;
     numero_documento_fiscal: string;
     data_previsao: string;
+    tipo_de_movimento: string = "000";
 
 }

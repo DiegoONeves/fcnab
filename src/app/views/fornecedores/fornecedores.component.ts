@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+
 import { Fornecedor } from '../../models/fornecedor.model';
+import { Common } from '../../shared/common';
 
 
 @Component({
@@ -14,11 +16,15 @@ export class FornecedoresComponent implements OnInit {
   fornecedores: FirebaseListObservable<any[]>;
   fornecedor: Fornecedor = new Fornecedor();
   fornecedorToUpdate: any = null;
+  commonHelper: Common = new Common();
+  
   ngOnInit() {
     this.listAll();
   }
 
   createOrEdit() {
+
+    this.fornecedor.cpfCnpj = Common.formatCpfCnpj(this.fornecedor.cpfCnpj);
     if (!this.fornecedorToUpdate) {
       this.angularFire.list('fornecedores').push(this.fornecedor);
     } else {
@@ -31,7 +37,6 @@ export class FornecedoresComponent implements OnInit {
 
   listAll() {
     this.fornecedores = this.angularFire.list('fornecedores');
-    console.log(this.fornecedores);
   }
 
   setCurrentFornecedor(fornecedor: any) {

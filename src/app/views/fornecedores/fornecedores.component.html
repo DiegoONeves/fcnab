@@ -16,19 +16,21 @@
     <div class="col-md-6">
       <div class="form-group">
         <label>Banco</label>
-        <input class="form-control" type="text" [(ngModel)]="fornecedor.banco" name="banco" />
+        <select class="form-control" [(ngModel)]="fornecedor.banco" name="banco">
+          <option value="{{banco.number}}" *ngFor="let banco of commonHelper.getBancos()">{{banco.name}}</option>
+        </select>
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
         <label>Agência</label>
-        <input class="form-control" type="text" [(ngModel)]="fornecedor.agencia" name="agencia" />
+        <input class="form-control" type="number" min="1" max="9999" [(ngModel)]="fornecedor.agencia" name="agencia" />
       </div>
     </div>
     <div class="col-md-5">
       <div class="form-group">
         <label>Conta</label>
-        <input class="form-control" type="text" [(ngModel)]="fornecedor.conta" name="conta" />
+        <input class="form-control" type="number" min="1" max="99999" [(ngModel)]="fornecedor.conta" name="conta" />
       </div>
     </div>
     <div class="col-md-1">
