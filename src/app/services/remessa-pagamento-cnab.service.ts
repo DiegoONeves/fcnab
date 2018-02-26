@@ -33,10 +33,11 @@ export class RemessaPagamentoCnabService {
   }
 
   constructor() { }
+
   remessa: Remessa = new Remessa();
 
   generateRemessa(contas: ContaPagar[], configurationHeader: ConfigurationHeader) {
-
+    console.log('chegou', contas.length);
     let fileCNAB = "";
     let contasList = new List<ContaPagar>();
 
@@ -51,7 +52,7 @@ export class RemessaPagamentoCnabService {
     this.remessa.header.NOME_DA_EMPRESA = this.dadosFC.Nome;
     this.remessa.header.NOME_DO_BANCO = this.dadosFC.Bancario.NomeBanco;
     fileCNAB = this.remessa.header.generateHeader();
-    contasList = contasList.OrderBy(x => x.tipoDocumento);
+    //contasList = contasList.OrderBy(x => x.tipoDocumento);
 
     let codigoLote = 1;
     var pagamentosSegmentoA = contasList.Where(x => x.codigo_tipo_documento === "TRA" || x.codigo_tipo_documento === "NF").ToArray();
@@ -72,12 +73,6 @@ export class RemessaPagamentoCnabService {
       codigoLote++;
     }
 
-    // var pagamentosSegmentoN = contasList.Where(x => x.codigo_tipo_documento === "BOL").ToArray();
-    // if (pagamentosSegmentoN.length > 0) {
-    //   fileCNAB += this.resolveSegmentoN(pagamentosSegmentoN, codigoLote, configurationHeader);
-    //   codigoLote++;
-    // }
-
     this.remessa.trailer.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
     this.remessa.trailer.CODIGO_DO_LOTE = "9999";
     this.remessa.trailer.TIPO_DE_REGISTRO = "9";
@@ -86,6 +81,7 @@ export class RemessaPagamentoCnabService {
     fileCNAB += this.remessa.trailer.generateTrailerRemessa();
 
     console.log('CNAB concluído');
+    this.remessa = new Remessa();
     return fileCNAB;
   }
 
@@ -119,8 +115,8 @@ export class RemessaPagamentoCnabService {
       detalhe.CODIGO_DO_LOTE = codigoLote.toString();
       detalhe.TIPO_DE_REGISTRO = "3";
       detalhe.SEGMENTO = "A";
-      detalhe.NUMERO_DO_REGISTRO = numeroRegistro.toString();
       detalhe.TIPO_DE_MOVIMENTO = currentConta.tipo_de_movimento;
+      detalhe.NUMERO_DO_REGISTRO = numeroRegistro.toString();
       detalhe.BANCO_FAVORECIDO = currentConta.fornecedor.banco;
       detalhe.AGENCIA_FAVORECIDO = currentConta.fornecedor.agencia;
       detalhe.CONTA_FAVORECIDO = currentConta.fornecedor.conta;
@@ -132,8 +128,13 @@ export class RemessaPagamentoCnabService {
       detalhe.MOEDA_TIPO = "009";
       detalhe.VALOR_DO_PAGTO = currentConta.valorAPagar.toString();
       detalhe.AVISO = "0";
+      detalhe.NUMERO_NOTA_FISCAL_OU_CNPJ = currentConta.numero_documento_fiscal;
 
-      linesSegmentoA += detalhe.generateDetalheSegmentoA();
+      if (currentConta.codigo_tipo_documento === "TRA") {
+        linesSegmentoA += detalhe.generateDetalheSegmentoA();
+      } else if (currentConta.codigo_tipo_documento === "NF") {
+        linesSegmentoA += detalhe.generateDetalheSegmentoA_NF();
+      }
       segmentoA.detalhes.push(detalhe);
 
       //verificar se é A NF ou Transferência
@@ -246,8 +247,6 @@ export class RemessaPagamentoCnabService {
 
     segmentoJ.trailer.TOTAL_VALOR_PAGTOS = sumValues.toString();
 
-    //generate trailer
-    //this.remessa.lotes.push(segmentoA);
     linesSegmentoJ += segmentoJ.trailer.generateTrailerSegmentoJ();
 
     this.remessa.lotes.push(segmentoJ);
@@ -326,7 +325,6 @@ export class RemessaPagamentoCnabService {
 
     segmentoO.trailer.TOTAL_VALOR_PAGTOS = sumValoresAPagar.toString();
 
-    console.log('trailer o');
     linesSegmentoO += segmentoO.trailer.generateTrailerSegmentoO();
 
     this.remessa.lotes.push(segmentoO);
@@ -396,7 +394,6 @@ export class RemessaPagamentoCnabService {
 
     segmentoN.trailer.TOTAL_VALOR_PAGTOS = sumValoresAPagar.toString();
 
-    console.log('trailer N');
     linesSegmentoN += segmentoN.trailer.generateTrailerSegmentoO();
 
     this.remessa.lotes.push(segmentoN);

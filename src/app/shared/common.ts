@@ -86,13 +86,11 @@ export class Common {
     }
 
     public static formatCpfCnpj(numeroInscricao: string) {
-        console.log('entrou', numeroInscricao)
         if (!numeroInscricao)
             return "";
 
         let result = numeroInscricao.replace(/\./g, '').replace(/-/g, '').replace(/[//"]/g, '');
 
-        console.log('result', result);
         return result;
     }
 
@@ -126,7 +124,6 @@ export class Common {
     }
 
     public static normalizeValues(value: string, beforeComma: number, afterComma) {
-        console.log('chegou', value);
         if (!value)
             return this.buildCharacters((beforeComma + afterComma), '0');
 
@@ -135,7 +132,7 @@ export class Common {
 
         result = this.padLeft(values[0], '0', beforeComma);
         result += this.padRight(values[1], '0', afterComma);
-
+        console.log('valor', result)
         return result;
     }
 

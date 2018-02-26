@@ -123,7 +123,6 @@ export class HeaderLote {
 
     private build_OCORRENCIAS() {
         this.headerLote += Common.buildCharacters(10, ' ');
-        this.headerLote += '\r\n';
     }
 
 
@@ -156,6 +155,8 @@ export class HeaderLote {
         this.build_CEP();
         this.build_ESTADO();
         this.build_OCORRENCIAS();
+        console.log('HEADER SEG A', this.headerLote.length)
+        this.headerLote += '\r\n';
 
         return this.headerLote;
     }
@@ -186,7 +187,9 @@ export class HeaderLote {
         this.build_CEP();
         this.build_ESTADO();
         this.build_OCORRENCIAS();
-
+        console.log('HEADER SEG J', this.headerLote.length)
+        this.headerLote += '\r\n';
+        
         return this.headerLote;
     }
 
@@ -216,6 +219,8 @@ export class HeaderLote {
         this.build_CEP();
         this.build_ESTADO();
         this.build_OCORRENCIAS();
+        console.log('HEADER SEG O', this.headerLote.length)
+        this.headerLote += '\r\n';
 
         return this.headerLote;
     }
@@ -247,6 +252,8 @@ export class HeaderLote {
         this.build_CEP();
         this.build_ESTADO();
         this.build_OCORRENCIAS();
+        console.log('HEADER SEG N', this.headerLote.length)
+        this.headerLote += '\r\n';
 
         return this.headerLote;
     }

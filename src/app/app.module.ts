@@ -22,6 +22,9 @@ import { FornecedoresComponent } from './views/fornecedores/fornecedores.compone
 import { AngularFireDatabase } from 'angularfire2/database';
 import { FornecedorService } from './services/fornecedor.service';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { LoadingModule } from 'ngx-loading';
+import { PreLoadService } from './services/preload.service';
 
 
 
@@ -39,7 +42,11 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
     NgDatepickerModule,
     BrowserAnimationsModule,
     CurrencyMaskModule,
-    AngularFireModule.initializeApp(environment.firebase)
+    AngularFireModule.initializeApp(environment.firebase),
+    ToastModule.forRoot(),
+    LoadingModule.forRoot({
+      fullScreenBackdrop: true
+    })
   ],
   providers: [
     OmieContaPagarService,
@@ -49,6 +56,7 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
     RemessaPagamentoCnabService,
     OmieDocumentoService,
     AngularFireDatabase,
+    PreLoadService,
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],

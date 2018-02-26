@@ -26,7 +26,6 @@ export class TrailerRemessa {
     private build_TOTAL_QTDE_REGISTROS() {
         this.trailerRemessaText += Common.padLeft(this.TOTAL_QTDE_REGISTROS.toString(), '0', 6);
         this.trailerRemessaText += Common.buildCharacters(211, ' ');
-        this.trailerRemessaText += '\r\n';
     }
 
     generateTrailerRemessa() {
@@ -37,7 +36,8 @@ export class TrailerRemessa {
         this.build_TIPO_DE_REGISTRO();
         this.build_TOTAL_QTDE_DE_LOTES();
         this.build_TOTAL_QTDE_REGISTROS();
-
+        console.log('TRAILER ARQUIVO',this.trailerRemessaText.length)
+        this.trailerRemessaText += '\r\n';
         return this.trailerRemessaText;
     }
 }

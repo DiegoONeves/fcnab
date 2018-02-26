@@ -1,3 +1,4 @@
+
 <div class="row">
   <h3>
     Listagem de Contas a Pagar</h3>
@@ -8,7 +9,6 @@
       <label for="idBeginDate">Data Inicial de Vencimento
       </label>
       <input class="form-control" id="idBeginDate" type="date" name="beginDate" [(ngModel)]="contasPagarSearch.beginDate" />
-      <!-- <ng-datepicker [options]="options" name="beginDate" [(ngModel)]="contasPagarSearch.beginDate"></ng-datepicker> -->
     </div>
     <div class="form-group">
       <label for="idEndDate">Data Final de Vencimento
@@ -58,21 +58,6 @@
   </div>
 </div>
 <div class="row">
-  <h3>Configurações de Header (Segmento N)</h3>
-  <div class="form-group">
-    <label>Tipo de Pagamento</label>
-    <select name="tipoDePagamentoHeaderSegmentoN" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoN" class="form-control">
-      <option value="{{formN.id}}" *ngFor="let formN of commonHelper.getTiposDePagamento()">{{formN.value}}</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>Forma de Pagamento</label>
-    <select class="form-control" name="formaDePagamentoHeaderSegmentoN" [(ngModel)]="configurationHeader.formaDePagamentoHeaderSegmentoN">
-      <option value="{{formN.id}}" *ngFor="let formN of commonHelper.getFormasDePagamento()">{{formN.value}}</option>
-    </select>
-  </div>
-</div>
-<div class="row">
   <h3>Configurações de Header (Segmento J)</h3>
   <div class="form-group">
     <label>Tipo de Pagamento</label>
@@ -94,7 +79,7 @@
         <td>
           <input type="checkbox" (change)="selecAll($event)">
         </td>
-        <td>Documento</td>
+        <td>Tipo de Documento</td>
         <td>Tipo de Movimento</td>
         <td>Fornecedor</td>
         <td>CPF/CNPJ</td>
@@ -115,7 +100,12 @@
         <td>
           <input type="checkbox" [(ngModel)]="conta.selecionado">
         </td>
-        <td>{{conta.tipoDocumento.descricao}}</td>
+        <td>
+          <select class="form-control" style="width:400px;" [(ngModel)]="conta.codigo_tipo_documento">
+            <option value="">Selecione um Tipo de Documento</option>
+            <option value="{{td.codigo}}" *ngFor="let td of tiposDeDocumento">{{td.descricao}}</option>
+          </select>
+        </td>
         <td>
           <select class="form-control" style="width:400px;" [(ngModel)]="conta.tipo_de_movimento">
             <option value="{{tm.id}}" *ngFor="let tm of commonHelper.getTiposDeMovimento()">{{tm.value}}</option>

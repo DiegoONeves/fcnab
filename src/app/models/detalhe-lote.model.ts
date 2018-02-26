@@ -60,6 +60,9 @@ export class Detalhe {
     QUANTIDADE_MOEDA: string;
     NOTA_FISCAL: string;
     DADOS_DO_TRIBUTO: string;
+    NUMERO_NOTA_FISCAL_OU_CNPJ: string;
+    NUMERO_INSCRICAO_FAVORECIDO: string;
+    TIPO_IDENTIFICACAO: string;
 
     private build_CODIGO_DO_BANCO() {
         this.detalheText = this.CODIGO_DO_BANCO;
@@ -95,6 +98,7 @@ export class Detalhe {
         this.detalheText += Common.buildCharacters(1, ' '); //BRANCOS
         this.detalheText += Common.padLeft(this.DAC_FAVORECIDO, '0', 1); //CONTA
     }
+    
     private build_NOME_DO_FAVORECIDO() {
         this.detalheText += Common.padRight(this.NOME_DO_FAVORECIDO, ' ', 30);
     }
@@ -168,8 +172,6 @@ export class Detalhe {
     }
     private build_OCORRENCIAS() {
         this.detalheText += Common.padRight(this.OCORRENCIAS, ' ', 10);
-        console.log(this.detalheText.length);
-        this.detalheText += '\r\n';
     }
 
     public build_CODIGO_DE_BARRAS(codigo: string) {
@@ -184,22 +186,22 @@ export class Detalhe {
     }
 
     private build_BANCO_FAVORECIDO_COD_DE_BARRAS() {
-        this.detalheText += this.BANCO_FAVORECIDO_COD_DE_BARRAS;
+        this.detalheText += Common.padLeft(this.BANCO_FAVORECIDO_COD_DE_BARRAS, '0', 3);
     }
     private build_DV_COD_DE_BARRAS() {
-        this.detalheText += this.DV_COD_DE_BARRAS;
+        this.detalheText += Common.padLeft(this.DV_COD_DE_BARRAS, '0', 1);
     }
     private build_VENCIMENTO_COD_DE_BARRAS() {
-        this.detalheText += this.VENCIMENTO_COD_DE_BARRAS;
+        this.detalheText += Common.padLeft(this.VENCIMENTO_COD_DE_BARRAS, '0', 4);
     }
     private build_MOEDA_COD_DE_BARRAS() {
-        this.detalheText += this.MOEDA_COD_DE_BARRAS;
+        this.detalheText += Common.padLeft(this.MOEDA_COD_DE_BARRAS, '0', 1);
     }
     private build_VALOR_COD_DE_BARRAS() {
-        this.detalheText += this.VALOR_COD_DE_BARRAS;
+        this.detalheText += Common.padLeft(this.VALOR_COD_DE_BARRAS, '0', 10);
     }
     private build_CAMPO_LIVRE_COD_DE_BARRAS() {
-        this.detalheText += this.CAMPO_LIVRE_COD_DE_BARRAS;
+        this.detalheText += Common.padLeft(this.CAMPO_LIVRE_COD_DE_BARRAS, '0', 25);
     }
     private build_DATA_VENCTO() {
         this.detalheText += Common.padRight(this.DATA_VENCTO.replace(/[//"]/g, ''), '0', 8);
@@ -262,7 +264,6 @@ export class Detalhe {
     private build_NOME_SACADOR() {
         this.detalheText += Common.padRight(this.NOME_SACADOR, ' ', 40);
         this.detalheText += Common.buildCharacters(53, ' ');
-        this.detalheText += '\r\n';
     }
 
     private build_NOME_CONCESSIONARIA() {
@@ -315,6 +316,44 @@ export class Detalhe {
         this.build_FINALIDADE_TED();
         this.build_AVISO();
         this.build_OCORRENCIAS();
+        console.log('DETALHE SEG A', this.detalheText.length)
+        this.detalheText += '\r\n';
+
+        return this.detalheText;
+    }
+
+    //Pagamentos através de Nota Fiscal – Liquidação Eletrônica
+    generateDetalheSegmentoA_NF() {
+        this.detalheText = "";
+        this.build_CODIGO_DO_BANCO();
+        this.build_CODIGO_DO_LOTE();
+        this.build_TIPO_DE_REGISTRO();
+        this.build_NUMERO_DO_REGISTRO();
+        this.build_SEGMENTO();
+        this.build_TIPO_DE_MOVIMENTO();
+        this.detalheText += Common.buildCharacters(3, '0');//ZEROS
+        this.build_BANCO_FAVORECIDO();
+        this.build_AGENCIA_CONTA();
+        this.build_NOME_DO_FAVORECIDO();
+        this.build_SEU_NUMERO();
+        this.build_DATA_DE_PAGTO();
+        this.build_MOEDA_TIPO();
+        this.detalheText += Common.buildCharacters(15, '0');
+        this.build_VALOR_DO_PAGTO();
+        this.build_NOSSO_NUMERO();
+        this.build_DATA_EFETIVA();
+        this.build_VALOR_EFETIVO();
+        //Nº NOTA FISCAL/CNPJ
+        //BRANCOS
+        this.build_N_DO_DOCUMENTO();
+        this.build_N_DE_INSCRICAO();
+
+        //Identificador
+        //brancos
+        this.build_AVISO();
+        this.build_OCORRENCIAS();
+        console.log('DETALHE SEG A', this.detalheText.length)
+        this.detalheText += '\r\n';
 
         return this.detalheText;
     }
@@ -343,6 +382,9 @@ export class Detalhe {
         this.build_SEU_NUMERO_SEG_J();
         this.build_NOSSO_NUMERO_SEG_J();
         this.build_OCORRENCIAS();
+        console.log('DETALHE SEG J', this.detalheText.length)
+        console.log(this.detalheText)
+        this.detalheText += '\r\n';
 
         return this.detalheText;
     }
@@ -365,6 +407,9 @@ export class Detalhe {
         this.build_TIPO_DE_INSCRICAO_SACADOR();
         this.build_NUMERO_INSCRICAO_SACADOR();
         this.build_NOME_SACADOR();
+        console.log('DETALHE SEG J52', this.detalheText.length)
+        this.detalheText += '\r\n';
+
         return this.detalheText;
     }
 
@@ -387,6 +432,8 @@ export class Detalhe {
         this.build_SEU_NUMERO();
         this.build_NOSSO_NUMERO_SEG_O();
         this.build_OCORRENCIAS();
+        console.log('DETALHE SEG O', this.detalheText.length)
+        this.detalheText += '\r\n';
 
         return this.detalheText;
     }

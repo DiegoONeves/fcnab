@@ -42,8 +42,6 @@ export class TrailerLote {
     private build_OCORRENCIAS() {
         //somente no arquivo retorno
         this.trailerLoteText += Common.buildCharacters(10, ' ');
-        console.log(this.trailerLoteText.length)
-        this.trailerLoteText += '\r\n';
         
     }
 
@@ -64,6 +62,8 @@ export class TrailerLote {
         this.build_TOTAL_QTDE_REGISTROS();
         this.build_TOTAL_VALOR_PAGTOS();
         this.build_OCORRENCIAS();
+        console.log('TRAILER SEG A',this.trailerLoteText.length)
+        this.trailerLoteText += '\r\n';
 
         return this.trailerLoteText;
     }
@@ -77,6 +77,8 @@ export class TrailerLote {
         this.build_TOTAL_QTDE_REGISTROS();
         this.build_TOTAL_VALOR_PAGTOS();
         this.build_OCORRENCIAS();
+        console.log('TRAILER SEG J',this.trailerLoteText.length)
+        this.trailerLoteText += '\r\n';
 
         return this.trailerLoteText;
     }
@@ -91,6 +93,8 @@ export class TrailerLote {
         this.build_TOTAL_VALOR_PAGTOS_SEG_O();
         this.build_TOTAL_QTDE_MOEDA();
         this.build_OCORRENCIAS();
+        console.log('TRAILER SEG O',this.trailerLoteText.length)
+        this.trailerLoteText += '\r\n';
 
         return this.trailerLoteText;
     }
@@ -104,6 +108,8 @@ export class TrailerLote {
         this.build_TOTAL_QTDE_REGISTROS();
         this.build_TOTAL_VALOR_PAGTOS();
         this.build_OCORRENCIAS();
+        console.log('TRAILER SEG N',this.trailerLoteText.length)
+        this.trailerLoteText += '\r\n';
 
         return this.trailerLoteText;
     }

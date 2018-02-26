@@ -32,6 +32,8 @@
     "moment": "^2.20.1",
     "ng2-currency-mask": "^4.4.1",
     "ng2-datepicker": "^2.2.5",
+    "ng2-toastr": "^4.1.2",
+    "ngx-loading": "^1.0.14",
     "rxjs": "^5.5.6",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.19"

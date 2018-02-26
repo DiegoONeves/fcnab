@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { PreLoadService } from './services/preload.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  constructor() { }
+  constructor(public toastr: ToastsManager,
+    private preLoadService: PreLoadService,
+    vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   title = 'app';
 

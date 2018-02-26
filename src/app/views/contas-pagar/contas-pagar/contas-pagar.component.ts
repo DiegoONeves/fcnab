@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { OmieContaPagarService } from '../../../services/omie-conta-pagar.service';
 import { ContasPagarSearch } from '../../../models/contas-pagar-search.model';
 import { ContaPagar } from '../../../models/conta-pagar.model';
@@ -8,6 +8,10 @@ import { FornecedorService } from '../../../services/fornecedor.service';
 import { Fornecedor } from '../../../models/fornecedor.model';
 import { Common } from '../../../shared/common';
 import { ConfigurationHeader } from '../../../models/configuration-header.model';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { OmieDocumentoService } from '../../../services/omie-documento.service';
+import * as moment from 'moment';
+import { PreLoadService } from '../../../services/preload.service';
 
 @Component({
   selector: 'app-contas-pagar',
@@ -20,17 +24,20 @@ export class ContasPagarComponent implements OnInit {
   commonHelper: Common = new Common();
   contasPagarSearch: ContasPagarSearch = new ContasPagarSearch();
   contasAPagar = new Array<ContaPagar>();
-
+  tiposDeDocumento: any;
   constructor(private omieContaPagarService: OmieContaPagarService,
     private remessaPagamentoCnabService: RemessaPagamentoCnabService,
-    private fornecedorService: FornecedorService) { }
+    private fornecedorService: FornecedorService,
+    public toastr: ToastsManager,
+    private omieDocumentoService: OmieDocumentoService,
+    private preLoadService: PreLoadService) { }
 
   async ngOnInit() {
-
+    this.tiposDeDocumento = await this.omieDocumentoService.getAllTiposDocumento();
   }
 
   isCanGenerateRemessa() {
-    return this.contasAPagar.filter(x => x.selecionado).length == 0;
+    return this.contasAPagar.filter(x => x.selecionado).length === 0;
   }
 
   selecAll(value: any) {
@@ -40,7 +47,7 @@ export class ContasPagarComponent implements OnInit {
   }
 
   async searchContasAPagar(page: number) {
-
+    this.preLoadService.show();
     this.contasPagarSearch.page = page;
 
     this.contasAPagar = await this.omieContaPagarService.search(this.contasPagarSearch);
@@ -58,19 +65,22 @@ export class ContasPagarComponent implements OnInit {
 
       });
     }
+    this.preLoadService.hide();
     console.log('contas a pagar', this.contasAPagar);
   }
 
   generateRemessa() {
+    this.preLoadService.show();
     let file = this.remessaPagamentoCnabService.generateRemessa(this.contasAPagar.filter(x => x.selecionado), this.configurationHeader);
     this.expFile(file);
+    this.preLoadService.hide();
+    this.toastr.success('Arquivo gerado com sucesso!', 'Sucesso!');
   }
 
 
 
   saveTextAsFile(data, filename) {
     if (!data) {
-      console.error('Console.save: No data')
       return;
     }
 
@@ -98,7 +108,7 @@ export class ContasPagarComponent implements OnInit {
 
 
   expFile(fileText: string) {
-    var fileName = "CNAB.txt"
+    var fileName = `CNAB_${moment(new Date()).format("YYYYMMDDHHmmss")}.txt`;
     this.saveTextAsFile(fileText, fileName);
   }
 

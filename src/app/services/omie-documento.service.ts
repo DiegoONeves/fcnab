@@ -24,4 +24,19 @@ export class OmieDocumentoService {
     return await this.httpClient.post(this.endPoint, body, ApiCallEnum.Omie);
   }
 
+  async getAllTiposDocumento() {
+    let body =
+      {
+        call: "PesquisarTipoDocumento",
+        app_key: environment.app_key,
+        app_secret: environment.app_secret,
+        param: [
+          { codigo: "" }
+        ]
+      }
+
+    let result = await this.httpClient.post(this.endPoint, body, ApiCallEnum.Omie);
+    return result.tipo_documento_cadastro;
+  }
+
 }

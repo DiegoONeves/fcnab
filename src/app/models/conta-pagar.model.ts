@@ -21,5 +21,5 @@ export class ContaPagar {
     numero_documento_fiscal: string;
     data_previsao: string;
     tipo_de_movimento: string = "000";
-
+    data_vencimentoFiltragem: Date;
 }
