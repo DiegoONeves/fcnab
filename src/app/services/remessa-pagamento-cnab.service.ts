@@ -41,8 +41,8 @@ export class RemessaPagamentoCnabService {
     let fileCNAB = "";
     let contasList = new List<ContaPagar>();
 
-    for (let c of contas)
-      contasList.Add(c);
+    for (let c of contas)  
+        contasList.Add(c);
 
     this.remessa.header.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
     this.remessa.header.INSCRICAO_NUMERO = this.dadosFC.CNPJ;
@@ -52,10 +52,12 @@ export class RemessaPagamentoCnabService {
     this.remessa.header.NOME_DA_EMPRESA = this.dadosFC.Nome;
     this.remessa.header.NOME_DO_BANCO = this.dadosFC.Bancario.NomeBanco;
     fileCNAB = this.remessa.header.generateHeader();
-    //contasList = contasList.OrderBy(x => x.tipoDocumento);
 
     let codigoLote = 1;
-    var pagamentosSegmentoA = contasList.Where(x => x.codigo_tipo_documento === "TRA" || x.codigo_tipo_documento === "NF").ToArray();
+    var pagamentosSegmentoA = contasList.Where(x => x.codigo_tipo_documento === "TRA"
+      || x.codigo_tipo_documento === "TED"
+      || x.codigo_tipo_documento === "DOC").ToArray();
+
     if (pagamentosSegmentoA.length > 0) {
       fileCNAB += this.resolveSegmentoA(pagamentosSegmentoA, codigoLote, configurationHeader);
       codigoLote++;
@@ -67,7 +69,7 @@ export class RemessaPagamentoCnabService {
       codigoLote++;
     }
 
-    var pagamentosSegmentoO = contasList.Where(x => x.codigo_tipo_documento === "BOL").ToArray();
+    var pagamentosSegmentoO = contasList.Where(x => x.codigo_tipo_documento === "FAT").ToArray();
     if (pagamentosSegmentoO.length > 0) {
       fileCNAB += this.resolveSegmentoO(pagamentosSegmentoO, codigoLote, configurationHeader);
       codigoLote++;
@@ -121,20 +123,16 @@ export class RemessaPagamentoCnabService {
       detalhe.AGENCIA_FAVORECIDO = currentConta.fornecedor.agencia;
       detalhe.CONTA_FAVORECIDO = currentConta.fornecedor.conta;
       detalhe.DAC_FAVORECIDO = currentConta.fornecedor.digitoConta.toString();
-      detalhe.NOME_DO_FAVORECIDO = currentConta.fornecedor.nome;
+      detalhe.NOME_DO_FAVORECIDO = currentConta.nome_fornecedor;
       detalhe.SEU_NUMERO = currentConta.numero_documento_fiscal;
       detalhe.N_DE_INSCRICAO = currentConta.cpfCnpj;
       detalhe.DATA_DE_PAGTO = currentConta.data_previsao;
       detalhe.MOEDA_TIPO = "009";
       detalhe.VALOR_DO_PAGTO = currentConta.valorAPagar.toString();
+      detalhe.NOTA_FISCAL = currentConta.numero_documento_fiscal;
       detalhe.AVISO = "0";
-      detalhe.NUMERO_NOTA_FISCAL_OU_CNPJ = currentConta.numero_documento_fiscal;
 
-      if (currentConta.codigo_tipo_documento === "TRA") {
-        linesSegmentoA += detalhe.generateDetalheSegmentoA();
-      } else if (currentConta.codigo_tipo_documento === "NF") {
-        linesSegmentoA += detalhe.generateDetalheSegmentoA_NF();
-      }
+      linesSegmentoA += detalhe.generateDetalheSegmentoA();
       segmentoA.detalhes.push(detalhe);
 
       //verificar se é A NF ou Transferência
@@ -195,7 +193,7 @@ export class RemessaPagamentoCnabService {
       detalheJ.SEGMENTO = "J";
       detalheJ.TIPO_DE_MOVIMENTO = currentConta.tipo_de_movimento;
       detalheJ.build_CODIGO_DE_BARRAS(currentConta.codigo_de_barras);
-      detalheJ.NOME_DO_FAVORECIDO = currentConta.fornecedor.nome;
+      detalheJ.NOME_DO_FAVORECIDO = currentConta.nome_fornecedor;
       detalheJ.DATA_VENCTO = currentConta.data_vencimento;
       detalheJ.VALOR_DO_TITULO = currentConta.valor_documento.toString();
       detalheJ.DESCONTOS = currentConta.desconto.toString();
@@ -232,6 +230,8 @@ export class RemessaPagamentoCnabService {
 
       linesSegmentoJ += detalheJ52.generateDetalheSegmentoJ52();
       segmentoJ.detalhes.push(detalheJ52);
+
+      numeroRegistro++;
     }
 
     segmentoJ.trailer.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;

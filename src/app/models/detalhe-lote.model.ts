@@ -60,9 +60,6 @@ export class Detalhe {
     QUANTIDADE_MOEDA: string;
     NOTA_FISCAL: string;
     DADOS_DO_TRIBUTO: string;
-    NUMERO_NOTA_FISCAL_OU_CNPJ: string;
-    NUMERO_INSCRICAO_FAVORECIDO: string;
-    TIPO_IDENTIFICACAO: string;
 
     private build_CODIGO_DO_BANCO() {
         this.detalheText = this.CODIGO_DO_BANCO;
@@ -98,7 +95,7 @@ export class Detalhe {
         this.detalheText += Common.buildCharacters(1, ' '); //BRANCOS
         this.detalheText += Common.padLeft(this.DAC_FAVORECIDO, '0', 1); //CONTA
     }
-    
+
     private build_NOME_DO_FAVORECIDO() {
         this.detalheText += Common.padRight(this.NOME_DO_FAVORECIDO, ' ', 30);
     }
@@ -124,11 +121,12 @@ export class Detalhe {
         this.detalheText += Common.buildCharacters(7, '0');
     }
     private build_VALOR_DO_PAGTO() {
-
         if (!this.VALOR_DO_PAGTO)
             this.VALOR_DO_PAGTO = "";
 
-        this.detalheText += Common.padLeft(this.VALOR_DO_PAGTO.replace('.', ''), '0', 15);
+        console.log('VALOR PAGAMENTO', this.VALOR_DO_PAGTO)
+
+        this.detalheText += Common.normalizeValues(this.VALOR_DO_PAGTO, 13, 2);
     }
     private build_NOSSO_NUMERO() {
         this.detalheText += Common.padRight(this.NOSSO_NUMERO, ' ', 15);
@@ -148,7 +146,7 @@ export class Detalhe {
         if (!this.VALOR_EFETIVO)
             this.VALOR_EFETIVO = "";
 
-        this.detalheText += Common.padLeft(this.VALOR_EFETIVO.replace('.', ''), '0', 15);
+        this.detalheText += Common.normalizeValues(this.VALOR_EFETIVO, 13, 2);
     }
     private build_FINALIDADE_DETALHE() {
         this.detalheText += Common.padRight(this.FINALIDADE_DETALHE, ' ', 18);
@@ -176,12 +174,14 @@ export class Detalhe {
 
     public build_CODIGO_DE_BARRAS(codigo: string) {
         if (codigo) {
+            codigo = codigo.substring(0, 44);
+            console.log('código', codigo.length)
             this.BANCO_FAVORECIDO_COD_DE_BARRAS = codigo.substring(0, 3);
             this.MOEDA_COD_DE_BARRAS = codigo.substring(3, 4);
             this.DV_COD_DE_BARRAS = codigo.substring(4, 5);
             this.VENCIMENTO_COD_DE_BARRAS = codigo.substring(5, 9);
             this.VALOR_COD_DE_BARRAS = codigo.substring(9, 19);
-            this.CAMPO_LIVRE_COD_DE_BARRAS = codigo.substring(19, 45);
+            this.CAMPO_LIVRE_COD_DE_BARRAS = codigo.substring(19, 44);
         }
     }
 
@@ -207,7 +207,7 @@ export class Detalhe {
         this.detalheText += Common.padRight(this.DATA_VENCTO.replace(/[//"]/g, ''), '0', 8);
     }
     private build_VALOR_DO_TITULO() {
-        this.detalheText += Common.padLeft(this.VALOR_DO_TITULO.replace('.', ''), '0', 15);
+        this.detalheText += Common.normalizeValues(this.VALOR_DO_TITULO, 13, 2);
     }
     private build_DESCONTOS() {
         this.detalheText += Common.padLeft(this.DESCONTOS.replace('.', ''), '0', 15);
@@ -224,7 +224,7 @@ export class Detalhe {
         this.detalheText += Common.buildCharacters(3, ' ');
     }
     private build_VALOR_PAGAMENTO() {
-        this.detalheText += Common.padLeft(this.VALOR_PAGAMENTO.replace('.', ''), '0', 15);
+        this.detalheText += Common.normalizeValues(this.VALOR_PAGAMENTO, 13, 2);
         this.detalheText += Common.buildCharacters(15, '0');
     }
 
@@ -285,10 +285,6 @@ export class Detalhe {
         this.detalheText += Common.normalizeValues(this.VALOR_A_PAGAR, 13, 2);
     }
 
-    private build_DADOS_DO_TRIBUTO() {
-
-    }
-
     generateDetalheSegmentoA() {
         this.detalheText = "";
         this.build_CODIGO_DO_BANCO();
@@ -314,42 +310,6 @@ export class Detalhe {
         this.build_N_DE_INSCRICAO();
         this.build_FINALIDADE_DOC_E_STATUS_FUNCIONARIO();
         this.build_FINALIDADE_TED();
-        this.build_AVISO();
-        this.build_OCORRENCIAS();
-        console.log('DETALHE SEG A', this.detalheText.length)
-        this.detalheText += '\r\n';
-
-        return this.detalheText;
-    }
-
-    //Pagamentos através de Nota Fiscal – Liquidação Eletrônica
-    generateDetalheSegmentoA_NF() {
-        this.detalheText = "";
-        this.build_CODIGO_DO_BANCO();
-        this.build_CODIGO_DO_LOTE();
-        this.build_TIPO_DE_REGISTRO();
-        this.build_NUMERO_DO_REGISTRO();
-        this.build_SEGMENTO();
-        this.build_TIPO_DE_MOVIMENTO();
-        this.detalheText += Common.buildCharacters(3, '0');//ZEROS
-        this.build_BANCO_FAVORECIDO();
-        this.build_AGENCIA_CONTA();
-        this.build_NOME_DO_FAVORECIDO();
-        this.build_SEU_NUMERO();
-        this.build_DATA_DE_PAGTO();
-        this.build_MOEDA_TIPO();
-        this.detalheText += Common.buildCharacters(15, '0');
-        this.build_VALOR_DO_PAGTO();
-        this.build_NOSSO_NUMERO();
-        this.build_DATA_EFETIVA();
-        this.build_VALOR_EFETIVO();
-        //Nº NOTA FISCAL/CNPJ
-        //BRANCOS
-        this.build_N_DO_DOCUMENTO();
-        this.build_N_DE_INSCRICAO();
-
-        //Identificador
-        //brancos
         this.build_AVISO();
         this.build_OCORRENCIAS();
         console.log('DETALHE SEG A', this.detalheText.length)

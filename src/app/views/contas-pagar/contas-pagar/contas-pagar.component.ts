@@ -67,11 +67,24 @@ export class ContasPagarComponent implements OnInit {
     }
     this.preLoadService.hide();
     console.log('contas a pagar', this.contasAPagar);
+
+    if (this.contasAPagar.length == 0) {
+      this.toastr.warning('Nenhuma conta para este período.', 'Atenção!')
+    }
   }
 
   generateRemessa() {
+
+    let contasToProcess = this.contasAPagar.filter(x => x.selecionado);
+    for (let c of contasToProcess) {
+      if (!Common.TiposDocumentosValidos.find(x => x === c.codigo_tipo_documento)) {
+        this.toastr.warning("Uma ou mais contas estão com tipo de documento inválido.", "Atenção!")
+        return;
+      }
+    }
+
     this.preLoadService.show();
-    let file = this.remessaPagamentoCnabService.generateRemessa(this.contasAPagar.filter(x => x.selecionado), this.configurationHeader);
+    let file = this.remessaPagamentoCnabService.generateRemessa(contasToProcess, this.configurationHeader);
     this.expFile(file);
     this.preLoadService.hide();
     this.toastr.success('Arquivo gerado com sucesso!', 'Sucesso!');
@@ -110,6 +123,14 @@ export class ContasPagarComponent implements OnInit {
   expFile(fileText: string) {
     var fileName = `CNAB_${moment(new Date()).format("YYYYMMDDHHmmss")}.txt`;
     this.saveTextAsFile(fileText, fileName);
+  }
+
+
+  verifyClass(contaPagar: ContaPagar) {
+    if (!Common.TiposDocumentosValidos.find(x => x === contaPagar.codigo_tipo_documento))
+      return "danger";
+
+    return "";
   }
 
 

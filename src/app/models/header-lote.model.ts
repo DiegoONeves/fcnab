@@ -76,7 +76,7 @@ export class HeaderLote {
     }
 
     private build_CONTA() {
-        this.headerLote += Common.padLeft(this.AGENCIA, '0', 12);
+        this.headerLote += Common.padLeft(this.CONTA, '0', 12);
         this.headerLote += Common.buildCharacters(1, ' ');
     }
 

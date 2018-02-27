@@ -1,9 +1,13 @@
+
 export class Common {
 
     public static padLeft(value: string, item: string, size: number): string {
 
-        if (value === undefined) value = "";
-
+        if (value === undefined) {
+            value = "";
+        }
+        value += "";
+        value = value.substring(0, size);
         while (value.length < size)
             value = item + value;
 
@@ -11,7 +15,11 @@ export class Common {
     }
 
     public static padRight(value: string, item: string, size: number): string {
-        if (value === undefined) value = "";
+        if (value === undefined) {
+            value = "";
+        }
+        value += "";
+        value = value.substring(0, size);
         while (value.length < size)
             value = value + item;
 
@@ -123,17 +131,31 @@ export class Common {
         { id: 98, value: "98 - Diversos" }];
     }
 
+    public getTiposDeIdentificacaoDeLiquidacao() {
+        return [
+            { codigo: 1, value: "1 - Identificação por CNPJ do beneficiário" },
+            { codigo: 2, value: "2 - Identificação por número de nota fiscal" },
+            { codigo: 3, value: "3 - Identificação por CNPJ de Terceiros/Filial" }
+        ];
+    }
+
     public static normalizeValues(value: string, beforeComma: number, afterComma) {
-        if (!value)
-            return this.buildCharacters((beforeComma + afterComma), '0');
+
+        if (value === undefined) {
+            let v = beforeComma + afterComma;
+            return this.buildCharacters(v, '0');
+        }
 
         let values = value.split('.');
         let result = "";
-
         result = this.padLeft(values[0], '0', beforeComma);
         result += this.padRight(values[1], '0', afterComma);
-        console.log('valor', result)
         return result;
     }
+
+    public static TiposDocumentosValidos = ["TRA", "BOL", "DOC", "TED", "FAT"]
+
+
+
 
 }
