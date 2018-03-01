@@ -37,6 +37,7 @@ export class Detalhe {
     MOEDA_COD_DE_BARRAS: string = "";
     VALOR_COD_DE_BARRAS: string = "";
     CAMPO_LIVRE_COD_DE_BARRAS: string = "";
+    CODIGO_DE_BARRAS_COMPLETO: string;
     DATA_VENCTO: string;
     VALOR_DO_TITULO: string;
     DESCONTOS: string;
@@ -174,14 +175,51 @@ export class Detalhe {
 
     public build_CODIGO_DE_BARRAS(codigo: string) {
         if (codigo) {
-            codigo = codigo.substring(0, 44);
             console.log('código', codigo.length)
-            this.BANCO_FAVORECIDO_COD_DE_BARRAS = codigo.substring(0, 3);
-            this.MOEDA_COD_DE_BARRAS = codigo.substring(3, 4);
-            this.DV_COD_DE_BARRAS = codigo.substring(4, 5);
-            this.VENCIMENTO_COD_DE_BARRAS = codigo.substring(5, 9);
-            this.VALOR_COD_DE_BARRAS = codigo.substring(9, 19);
-            this.CAMPO_LIVRE_COD_DE_BARRAS = codigo.substring(19, 44);
+            if (codigo.length === 44) {
+                this.BANCO_FAVORECIDO_COD_DE_BARRAS = codigo.substring(0, 3);
+                this.MOEDA_COD_DE_BARRAS = codigo.substring(3, 4);
+                this.DV_COD_DE_BARRAS = codigo.substring(4, 5);
+                this.VENCIMENTO_COD_DE_BARRAS = codigo.substring(5, 9);
+                this.VALOR_COD_DE_BARRAS = codigo.substring(9, 19);
+                this.CAMPO_LIVRE_COD_DE_BARRAS = codigo.substring(19, 44);
+
+                // this.CODIGO_DE_BARRAS_COMPLETO = this.BANCO_FAVORECIDO_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.MOEDA_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.DV_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.VENCIMENTO_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.VALOR_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.CAMPO_LIVRE_COD_DE_BARRAS;
+
+            } else if (codigo.length === 47) {
+                this.BANCO_FAVORECIDO_COD_DE_BARRAS = codigo.substring(0, 3);
+                this.MOEDA_COD_DE_BARRAS = codigo.substring(3, 4);
+                this.CAMPO_LIVRE_COD_DE_BARRAS = codigo.substring(4, 9);
+                this.CAMPO_LIVRE_COD_DE_BARRAS += codigo.substring(10, 20);
+                this.CAMPO_LIVRE_COD_DE_BARRAS += codigo.substring(21, 31);
+                this.DV_COD_DE_BARRAS = codigo.substring(32, 33);
+                this.VENCIMENTO_COD_DE_BARRAS = codigo.substring(33, 37);
+                this.VALOR_COD_DE_BARRAS = codigo.substring(37, 47);
+
+
+                console.log(this.BANCO_FAVORECIDO_COD_DE_BARRAS);
+                this.MOEDA_COD_DE_BARRAS = codigo.substring(3, 4);
+                this.CAMPO_LIVRE_COD_DE_BARRAS = codigo.substring(4, 9);
+                this.CAMPO_LIVRE_COD_DE_BARRAS += codigo.substring(10, 20);
+                this.CAMPO_LIVRE_COD_DE_BARRAS += codigo.substring(21, 31);
+                this.DV_COD_DE_BARRAS = codigo.substring(32, 33);
+                this.VENCIMENTO_COD_DE_BARRAS = codigo.substring(33, 37);
+                this.VALOR_COD_DE_BARRAS = codigo.substring(37, 47);
+
+
+
+                // this.CODIGO_DE_BARRAS_COMPLETO = this.BANCO_FAVORECIDO_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.MOEDA_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.CAMPO_LIVRE_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.DV_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.VENCIMENTO_COD_DE_BARRAS;
+                // this.CODIGO_DE_BARRAS_COMPLETO += this.VALOR_COD_DE_BARRAS;
+            }
         }
     }
 
@@ -332,6 +370,7 @@ export class Detalhe {
         this.build_VENCIMENTO_COD_DE_BARRAS();
         this.build_VALOR_COD_DE_BARRAS();
         this.build_CAMPO_LIVRE_COD_DE_BARRAS();
+        //this.detalheText += Common.padLeft(this.CODIGO_DE_BARRAS_COMPLETO, '0', 44);
         this.build_NOME_DO_FAVORECIDO();
         this.build_DATA_VENCTO();
         this.build_VALOR_DO_TITULO();

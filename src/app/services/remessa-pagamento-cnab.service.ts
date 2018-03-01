@@ -41,8 +41,8 @@ export class RemessaPagamentoCnabService {
     let fileCNAB = "";
     let contasList = new List<ContaPagar>();
 
-    for (let c of contas)  
-        contasList.Add(c);
+    for (let c of contas)
+      contasList.Add(c);
 
     this.remessa.header.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
     this.remessa.header.INSCRICAO_NUMERO = this.dadosFC.CNPJ;
@@ -166,7 +166,7 @@ export class RemessaPagamentoCnabService {
     segmentoJ.header = new HeaderLote();
     segmentoJ.header.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
     segmentoJ.header.CODIGO_DO_LOTE = codigoLote;
-    segmentoJ.header.TIPO_DE_PAGAMENTO = configurationHeader.formaDePagamentoHeaderSegmentoJ; //nos arquivos sempre usa o 20
+    segmentoJ.header.TIPO_DE_PAGAMENTO = configurationHeader.tipoDePagamentoHeaderSegmentoJ; //nos arquivos sempre usa o 20
     segmentoJ.header.FORMA_DE_PAGAMENTO = configurationHeader.formaDePagamentoHeaderSegmentoJ;
     segmentoJ.header.EMPRESA_INSCRICAO = this.remessa.header.EMPRESA_INSCRICAO;
     segmentoJ.header.INSCRICAO_NUMERO = this.remessa.header.INSCRICAO_NUMERO;
@@ -210,28 +210,32 @@ export class RemessaPagamentoCnabService {
 
       numeroRegistro++;
 
-      let detalheJ52 = new Detalhe();
-      detalheJ52.CODIGO_DO_BANCO = detalheJ.CODIGO_DO_BANCO;
-      detalheJ52.CODIGO_DO_LOTE = detalheJ.CODIGO_DO_LOTE;
-      detalheJ52.TIPO_DE_REGISTRO = "3";
-      detalheJ52.NUMERO_DO_REGISTRO = numeroRegistro.toString();
-      detalheJ52.SEGMENTO = "J";
-      detalheJ52.TIPO_DE_MOVIMENTO = currentConta.tipo_de_movimento;
-      detalheJ52.NOME_PAGADOR = this.dadosFC.Nome;
-      detalheJ52.CODIGO_DO_REGISTRO = "52";
-      detalheJ52.NOME_BENEFICIARIO = currentConta.fornecedor.nome;
-      detalheJ52.NUMERO_INSCRICAO_PAGADOR = Common.formatCpfCnpj(this.dadosFC.CNPJ);
-      detalheJ52.TIPO_DE_INSCRICAO_PAGADOR = Common.verifyInscricao(detalheJ52.NUMERO_INSCRICAO_PAGADOR);
-      detalheJ52.NUMERO_INSCRICAO_BENEFICIARIO = Common.formatCpfCnpj(currentConta.fornecedor.cpfCnpj);
-      detalheJ52.TIPO_DE_INSCRICAO_BENEFICIARIO = Common.verifyInscricao(detalheJ52.NUMERO_INSCRICAO_BENEFICIARIO);
-      detalheJ52.NUMERO_INSCRICAO_SACADOR = Common.formatCpfCnpj(this.dadosFC.CNPJ);
-      detalheJ52.TIPO_DE_INSCRICAO_SACADOR = detalheJ52.TIPO_DE_INSCRICAO_PAGADOR;
-      detalheJ52.NOME_SACADOR = this.dadosFC.Nome;
+      if (configurationHeader.formaDePagamentoHeaderSegmentoJ === "30"
+        || configurationHeader.formaDePagamentoHeaderSegmentoJ === "31") {
 
-      linesSegmentoJ += detalheJ52.generateDetalheSegmentoJ52();
-      segmentoJ.detalhes.push(detalheJ52);
+        let detalheJ52 = new Detalhe();
+        detalheJ52.CODIGO_DO_BANCO = detalheJ.CODIGO_DO_BANCO;
+        detalheJ52.CODIGO_DO_LOTE = detalheJ.CODIGO_DO_LOTE;
+        detalheJ52.TIPO_DE_REGISTRO = "3";
+        detalheJ52.NUMERO_DO_REGISTRO = numeroRegistro.toString();
+        detalheJ52.SEGMENTO = "J";
+        detalheJ52.TIPO_DE_MOVIMENTO = currentConta.tipo_de_movimento;
+        detalheJ52.NOME_PAGADOR = this.dadosFC.Nome;
+        detalheJ52.CODIGO_DO_REGISTRO = "52";
+        detalheJ52.NOME_BENEFICIARIO = currentConta.fornecedor.nome;
+        detalheJ52.NUMERO_INSCRICAO_PAGADOR = Common.formatCpfCnpj(this.dadosFC.CNPJ);
+        detalheJ52.TIPO_DE_INSCRICAO_PAGADOR = Common.verifyInscricao(detalheJ52.NUMERO_INSCRICAO_PAGADOR);
+        detalheJ52.NUMERO_INSCRICAO_BENEFICIARIO = Common.formatCpfCnpj(currentConta.fornecedor.cpfCnpj);
+        detalheJ52.TIPO_DE_INSCRICAO_BENEFICIARIO = Common.verifyInscricao(detalheJ52.NUMERO_INSCRICAO_BENEFICIARIO);
+        detalheJ52.NUMERO_INSCRICAO_SACADOR = Common.formatCpfCnpj(this.dadosFC.CNPJ);
+        detalheJ52.TIPO_DE_INSCRICAO_SACADOR = detalheJ52.TIPO_DE_INSCRICAO_PAGADOR;
+        detalheJ52.NOME_SACADOR = this.dadosFC.Nome;
 
-      numeroRegistro++;
+        linesSegmentoJ += detalheJ52.generateDetalheSegmentoJ52();
+        segmentoJ.detalhes.push(detalheJ52);
+
+        numeroRegistro++;
+      }
     }
 
     segmentoJ.trailer.CODIGO_DO_BANCO = this.dadosFC.Bancario.CodigoDoBanco;
@@ -343,8 +347,8 @@ export class RemessaPagamentoCnabService {
     segmentoN.header.CODIGO_DO_LOTE = codigoLote;
     segmentoN.header.TIPO_DE_REGISTRO = "1";
     segmentoN.header.TIPO_DE_OPERACAO = "C";
-    segmentoN.header.TIPO_DE_PAGAMENTO = configurationHeader.tipoDePagamentoHeaderSegmentoO;
-    segmentoN.header.FORMA_DE_PAGAMENTO = configurationHeader.formaDePagamentoHeaderSegmentoO;
+    segmentoN.header.TIPO_DE_PAGAMENTO = configurationHeader.tipoDePagamentoHeaderSegmentoN;
+    segmentoN.header.FORMA_DE_PAGAMENTO = configurationHeader.formaDePagamentoHeaderSegmentoN;
     segmentoN.header.INSCRICAO_NUMERO = this.dadosFC.CNPJ;
     segmentoN.header.EMPRESA_INSCRICAO = Common.verifyInscricao(segmentoN.header.INSCRICAO_NUMERO);
     segmentoN.header.AGENCIA = this.dadosFC.Bancario.Agencia;

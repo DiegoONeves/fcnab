@@ -27,7 +27,7 @@
 </div>
 <br>
 <div class="row">
-  <h3>Configurações de Header (Segmento A) - DOC, TED e Transferências</h3>
+  <h3>Segmento A - Pagamentos através de cheque, OP, DOC, TED e Transferências</h3>
   <div class="form-group">
     <label>Tipo de Pagamento</label>
     <select name="tipoDePagamentoHeaderSegmentoA" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoA" class="form-control">
@@ -42,7 +42,7 @@
   </div>
 </div>
 <div class="row">
-  <h3>Configurações de Header (Segmento O) - Faturas</h3>
+  <h3>Segmento O - Pagamento de Contas de Concessionárias e Tributos com código de barras (Faturas)</h3>
   <div class="form-group">
     <label>Tipo de Pagamento</label>
     <select name="tipoDePagamentoHeaderSegmentoO" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoO" class="form-control">
@@ -57,7 +57,7 @@
   </div>
 </div>
 <div class="row">
-  <h3>Configurações de Header (Segmento J) - Boletos</h3>
+  <h3>Segmento J - Liquidação de títulos (bloquetos) em cobrança no Itaú e em outros Bancos (Boletos)</h3>
   <div class="form-group">
     <label>Tipo de Pagamento</label>
     <select name="tipoDePagamentoHeaderSegmentoJ" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoJ" class="form-control">
@@ -102,13 +102,13 @@
           <input type="checkbox" [(ngModel)]="conta.selecionado">
         </td>
         <td>
-          <select class="form-control" style="width:400px;" [(ngModel)]="conta.codigo_tipo_documento">
+          <select class="form-control" style="width:200px;" [(ngModel)]="conta.codigo_tipo_documento">
             <option value="">Selecione um Tipo de Documento</option>
             <option value="{{td.codigo}}" *ngFor="let td of tiposDeDocumento">{{td.descricao}}</option>
           </select>
         </td>
         <td>
-          <select class="form-control" style="width:400px;" [(ngModel)]="conta.tipo_de_movimento">
+          <select class="form-control" style="width:200px;" [(ngModel)]="conta.tipo_de_movimento">
             <option value="{{tm.id}}" *ngFor="let tm of commonHelper.getTiposDeMovimento()">{{tm.value}}</option>
           </select>
         </td>
@@ -116,7 +116,7 @@
           {{conta.nome_fornecedor }}
         </td>
         <td>
-          {{conta.cpfCnpj}}
+          {{commonHelper.setMask(conta.cpfCnpj)}}
         </td>
         <td>
           {{conta.fornecedor.banco}}

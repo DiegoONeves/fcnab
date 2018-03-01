@@ -153,7 +153,18 @@ export class Common {
         return result;
     }
 
-    public static TiposDocumentosValidos = ["TRA", "BOL", "DOC", "TED", "FAT"]
+    public static TiposDocumentosValidos = ["TRA", "BOL", "DOC", "TED", "FAT"];
+
+
+    public setMask(doc: string) {
+        if (doc.length === 11) {
+            return `${doc[0] + doc[1] + doc[2]}.${doc[3] + doc[4] + doc[5]}.${doc[6] + doc[7] + doc[8]}-${doc[9] + doc[10]}`;
+        }
+        else if (doc.length === 14) {
+            return `${doc[0] + doc[1]}.${doc[2] + doc[3] + doc[4]}.${doc[5] + doc[6] + doc[7]}/${doc[8] + doc[9] + doc[10] + doc[11]}-${doc[12] + doc[13]}`;
+        } else
+            return doc;
+    }
 
 
 

@@ -30,7 +30,7 @@ export class ContasPagarComponent implements OnInit {
     private fornecedorService: FornecedorService,
     public toastr: ToastsManager,
     private omieDocumentoService: OmieDocumentoService,
-    private preLoadService: PreLoadService) { }
+    public preLoadService: PreLoadService) { }
 
   async ngOnInit() {
     this.tiposDeDocumento = await this.omieDocumentoService.getAllTiposDocumento();
@@ -121,7 +121,7 @@ export class ContasPagarComponent implements OnInit {
 
 
   expFile(fileText: string) {
-    var fileName = `CNAB_${moment(new Date()).format("YYYYMMDDHHmmss")}.txt`;
+    var fileName = `${moment(new Date()).format("DDMM")}${Common.padRight(Math.round((Math.random() * 100) + 1).toString().substring(0, 2), '0', 2)}.txt`;
     this.saveTextAsFile(fileText, fileName);
   }
 
@@ -131,6 +131,11 @@ export class ContasPagarComponent implements OnInit {
       return "danger";
 
     return "";
+  }
+
+  generateNameCNAB() {
+    let data = new Date();
+
   }
 
 
