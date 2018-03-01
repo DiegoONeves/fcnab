@@ -10,7 +10,7 @@ import { PreLoadService } from './services/preload.service';
 export class AppComponent {
 
   constructor(public toastr: ToastsManager,
-    private preLoadService: PreLoadService,
+    public preLoadService: PreLoadService,
     vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
   }
