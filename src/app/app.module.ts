@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
-import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -38,7 +38,7 @@ import { PreLoadService } from './services/preload.service';
   imports: [
     BrowserModule,
     HttpModule,
-    RouterModule.forRoot(AppRoutes),
+    RouterModule.forRoot(AppRoutes, { useHash: true }),
     NgDatepickerModule,
     BrowserAnimationsModule,
     CurrencyMaskModule,
@@ -57,7 +57,7 @@ import { PreLoadService } from './services/preload.service';
     OmieDocumentoService,
     AngularFireDatabase,
     PreLoadService,
-    { provide: LocationStrategy, useClass: PathLocationStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
   bootstrap: [AppComponent]
