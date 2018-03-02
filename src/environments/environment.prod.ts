@@ -5,11 +5,11 @@ export const environment = {
   url_omie: "http://app.omie.com.br/api/v1",
   url_fcnab: "",
   firebase: {
-    apiKey: "AIzaSyABiL2B_lsthRhRWiLYtF0ncOCv7IiPG1U",
-    authDomain: "fcnabdb.firebaseapp.com",
-    databaseURL: "https://fcnabdb.firebaseio.com",
-    projectId: "fcnabdb",
-    storageBucket: "fcnabdb.appspot.com",
-    messagingSenderId: "616997090632"
+    apiKey: "AIzaSyAKLx4_QchzKNCCSmYr6fCeo-Aji2nA4tk",
+    authDomain: "geradorcnab-fc.firebaseapp.com",
+    databaseURL: "https://geradorcnab-fc.firebaseio.com",
+    projectId: "geradorcnab-fc",
+    storageBucket: "geradorcnab-fc.appspot.com",
+    messagingSenderId: "812850754872"
   }
 };
