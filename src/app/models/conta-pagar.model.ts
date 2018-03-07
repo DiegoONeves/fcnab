@@ -22,4 +22,5 @@ export class ContaPagar {
     data_previsao: string;
     tipo_de_movimento: string = "000";
     data_vencimentoFiltragem: Date;
+    canShow: boolean = true;
 }

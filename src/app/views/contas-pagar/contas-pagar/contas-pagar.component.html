@@ -27,7 +27,11 @@
 </div>
 <br>
 <div class="row">
-  <h3>Segmento A - Pagamentos através de cheque, OP, DOC, TED e Transferências</h3>
+  <h3>Segmento A - Pagamentos através de cheque, OP, DOC, TED e Transferências
+    <small>
+      <input type="checkbox" [(ngModel)]="configurationHeader.listSegmentoA" (change)="verifyPagamentosToShow()" />
+    </small>
+  </h3>
   <div class="form-group">
     <label>Tipo de Pagamento</label>
     <select name="tipoDePagamentoHeaderSegmentoA" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoA" class="form-control">
@@ -42,7 +46,11 @@
   </div>
 </div>
 <div class="row">
-  <h3>Segmento O - Pagamento de Contas de Concessionárias e Tributos com código de barras (Faturas)</h3>
+  <h3>Segmento O - Pagamento de Contas de Concessionárias e Tributos com código de barras (Faturas)
+    <small>
+      <input type="checkbox" [(ngModel)]="configurationHeader.listSegmentoO" (change)="verifyPagamentosToShow()" />
+    </small>
+  </h3>
   <div class="form-group">
     <label>Tipo de Pagamento</label>
     <select name="tipoDePagamentoHeaderSegmentoO" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoO" class="form-control">
@@ -57,7 +65,11 @@
   </div>
 </div>
 <div class="row">
-  <h3>Segmento J - Liquidação de títulos (bloquetos) em cobrança no Itaú e em outros Bancos (Boletos)</h3>
+  <h3>Segmento J - Liquidação de títulos (bloquetos) em cobrança no Itaú e em outros Bancos (Boletos)
+    <small>
+      <input type="checkbox" [(ngModel)]="configurationHeader.listSegmentoJ" (change)="verifyPagamentosToShow()" />
+    </small>
+  </h3>
   <div class="form-group">
     <label>Tipo de Pagamento</label>
     <select name="tipoDePagamentoHeaderSegmentoJ" [(ngModel)]="configurationHeader.tipoDePagamentoHeaderSegmentoJ" class="form-control">
@@ -97,7 +109,7 @@
         <td>Multa</td>
         <td>Juros</td>
       </tr>
-      <tr *ngFor="let conta of contasAPagar" [ngClass]="verifyClass(conta)">
+      <tr *ngFor="let conta of test()" [ngClass]="verifyClass(conta)">
         <td>
           <input type="checkbox" [(ngModel)]="conta.selecionado">
         </td>

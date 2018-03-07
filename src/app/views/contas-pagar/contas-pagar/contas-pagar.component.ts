@@ -51,6 +51,7 @@ export class ContasPagarComponent implements OnInit {
     this.contasPagarSearch.page = page;
 
     this.contasAPagar = await this.omieContaPagarService.search(this.contasPagarSearch);
+    this.verifyPagamentosToShow();
 
     for (let c of this.contasAPagar) {
       this.fornecedorService.getByCpfCnpj(Common.formatCpfCnpj(c.cpfCnpj)).subscribe(x => {
@@ -71,10 +72,10 @@ export class ContasPagarComponent implements OnInit {
     if (this.contasAPagar.length == 0) {
       this.toastr.warning('Nenhuma conta para este período.', 'Atenção!')
     }
+    this.verifyPagamentosToShow();
   }
 
   generateRemessa() {
-
     let contasToProcess = this.contasAPagar.filter(x => x.selecionado);
     for (let c of contasToProcess) {
       if (!Common.TiposDocumentosValidos.find(x => x === c.codigo_tipo_documento)) {
@@ -133,9 +134,27 @@ export class ContasPagarComponent implements OnInit {
     return "";
   }
 
-  generateNameCNAB() {
-    let data = new Date();
+  verifyPagamentosToShow() {
 
+
+    for (let x of this.contasAPagar) {
+
+      if (x.codigo_tipo_documento === "BOL") {
+        console.log('achou', x.codigo_tipo_documento);
+        x.canShow = this.configurationHeader.listSegmentoJ;
+      }
+
+      if (x.codigo_tipo_documento === "FAT")
+        x.canShow = this.configurationHeader.listSegmentoO;
+
+      if (x.codigo_tipo_documento === "TRA")
+        x.canShow = this.configurationHeader.listSegmentoA;
+    }
+
+  }
+
+  test() {
+    return this.contasAPagar.filter(x => x.canShow);
   }
 
 
